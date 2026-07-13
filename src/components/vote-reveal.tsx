@@ -49,6 +49,7 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
 
   const getInitial = (id: string) => playerInfo.get(id)?.initial ?? "?";
   const getColor = (id: string) => playerInfo.get(id)?.color ?? AVATAR_COLORS[0];
+  const getName = (id: string) => playerInfo.get(id)?.name ?? "?";
 
   return (
     <div className="w-full max-w-lg mx-auto space-y-2 animate-fade-in">
@@ -63,16 +64,12 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
                 visible ? "opacity-100 scale-100" : "opacity-0 scale-75"
               }`}
             >
-              <span className={`inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold leading-none ${getColor(v.playerId)}`}>
-                {getInitial(v.playerId)}
-              </span>
-              <span className="text-text-muted text-[10px] mx-0.5">→</span>
+              <span className="text-text-primary font-medium text-xs">{getName(v.playerId)}</span>
+              <span className="text-text-muted text-[10px]">→</span>
               {v.targetId ? (
-                <span className={`inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold leading-none ${getColor(v.targetId)}`}>
-                  {getInitial(v.targetId)}
-                </span>
+                <span className="text-brand-light font-bold text-xs">{getName(v.targetId)}</span>
               ) : (
-                <span className="text-text-muted text-[9px] italic">x</span>
+                <span className="text-text-muted text-[10px] italic">x</span>
               )}
             </div>
           );
