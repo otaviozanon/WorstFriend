@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "WorstFriend - Amigos de M*",
   description: "O jogo que vai destruir suas amizades",
-  icons: { icon: "/crown.svg", shortcut: "/crown.svg", apple: "/crown.svg" },
+  icons: { icon: "/poop.svg", shortcut: "/poop.svg", apple: "/poop.svg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

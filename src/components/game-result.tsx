@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
-import { Crown, RotateCcw, PartyPopper } from "lucide-react";
+import { RotateCcw, PartyPopper } from "lucide-react";
 import RulesModal from "./rules-modal";
 
 const CONFETTI_DOTS = [
@@ -57,9 +57,10 @@ export default function GameResult() {
                   : "bg-brand/15 border-brand/40"
               }`}
             >
-              <Crown
-                size={64}
-                className={gameResult.isTie ? "text-accent-warning" : "text-brand-light"}
+              <img
+                src="/poop.svg"
+                alt="Amigo de M*"
+                className={`w-16 h-16 ${gameResult.isTie ? "opacity-70" : ""}`}
               />
             </div>
           </div>

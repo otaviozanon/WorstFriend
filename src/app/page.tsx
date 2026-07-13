@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
-import { Crown, Users, LogIn, ArrowRight } from "lucide-react";
+import { Users, LogIn, ArrowRight } from "lucide-react";
 import RulesModal from "@/components/rules-modal";
 
 export default function HomePage() {
@@ -40,7 +40,7 @@ export default function HomePage() {
       <div className="w-full max-w-md space-y-10 animate-fade-in">
         <div className="text-center space-y-4">
           <div className="flex justify-center">
-            <Crown size={72} className="text-brand-light animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]" />
+            <img src="/poop.svg" alt="WorstFriend" className="w-[72px] h-[72px] animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]" />
           </div>
           <div>
             <h1 className="text-4xl font-black text-text-primary tracking-tight">
