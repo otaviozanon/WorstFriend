@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">WorstFriend</h1>
-<p align="center"><strong>Amigos de M*</strong> — Versao online do classico jogo de cartas brasileiro</p>
+<p align="center"><strong>Amigos de M*</strong> — Versão online do clássico jogo de cartas brasileiro</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/jogadores-3%2B-orange" />
@@ -16,9 +16,9 @@
 
 ## Como Jogar
 
-O sistema revela uma carta com uma pergunta constrangedora. Todos tem **30 segundos** para votar em quem melhor se encaixa na descricao. Nao pode votar em si mesmo, e os votos sao secretos ate o fim do tempo.
+O sistema revela uma carta com uma pergunta constrangedora. Todos têm **30 segundos** para votar em quem melhor se encaixa na descrição. Não pode votar em si mesmo, e os votos são secretos até o fim do tempo.
 
-O jogador mais votado **ganha a carta**. O primeiro a acumular o numero de cartas definido (4, 5 ou 7) e coroado o <strong>Amigo de M*</strong>.
+O jogador mais votado **ganha a carta**. O primeiro a acumular o número de cartas definido (4, 5 ou 7) é coroado o <strong>Amigo de M*</strong>.
 
 <p align="center">
   <em>"Quem tem mais cara de quem peida silenciosamente?"<br />"Quem seria o primeiro a morrer em um apocalipse zumbi?"<br />"Quem e o pior motorista do grupo?"</em>
@@ -47,10 +47,10 @@ npm install
 # Desenvolvimento (Next.js + WebSocket server)
 npm run dev
 
-# Build de producao
+# Build de produção
 npm run build
 
-# Iniciar em producao
+# Iniciar em produção
 npm start
 ```
 
@@ -120,11 +120,11 @@ tests/              # Testes do game-engine
 
 ## 150 Cartas
 
-Perguntas sobre comportamentos, habitos questionaveis e situacoes constrangedoras entre amigos — do classico "Quem peida no elevador?" ao profundo "Quem venderia a alma por um combo do McDonalds?".
+Perguntas sobre comportamentos, hábitos questionáveis e situações constrangedoras entre amigos — do clássico "Quem peida no elevador?" ao profundo "Quem venderia a alma por um combo do McDonalds?".
 
 ---
 
 <p align="center">
-  Feito com 💩 por amigos que nao se levam a serio<br />
+  Feito com 💩 por amigos que não se levam a sério<br />
   Jogo original: <strong>Amigos de Merda</strong> por Buró Brasil
 </p>

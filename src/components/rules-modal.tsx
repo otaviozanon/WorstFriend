@@ -37,14 +37,14 @@ export default function RulesModal() {
                 <ol className="list-decimal list-inside space-y-1">
                   <li>O sistema revela uma carta com uma pergunta.</li>
                   <li>Todos tem <strong>30 segundos</strong> para votar em quem melhor se encaixa na pergunta.</li>
-                  <li>NAO pode votar em si mesmo.</li>
-                  <li>Votos sao secretos ate o fim do tempo.</li>
-                  <li>Quem nao votar no prazo, perde o voto.</li>
+                  <li>NÃO pode votar em si mesmo.</li>
+                  <li>Votos são secretos até o fim do tempo.</li>
+                  <li>Quem não votar no prazo, perde o voto.</li>
                 </ol>
               </div>
 
               <div>
-                <h3 className="font-bold text-brand-light mb-1">Pontuacao</h3>
+                <h3 className="font-bold text-brand-light mb-1">Pontuação</h3>
                 <ul className="list-disc list-inside space-y-1">
                   <li>O jogador mais votado ganha a carta.</li>
                   <li>Empate: ninguém ganha a carta.</li>
