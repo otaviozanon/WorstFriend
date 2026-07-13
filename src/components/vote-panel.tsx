@@ -70,9 +70,7 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
       </div>
 
       <div className="flex flex-wrap justify-center gap-2">
-        {!hasVoted && others.length > 0 && (
-          <p className="w-full text-text-muted text-xs text-center mb-1">Toque em um jogador para votar:</p>
-        )}
+        <p className="w-full text-text-muted text-xs text-center mb-1">Toque em um jogador para votar:</p>
         {others.map((p, i) => {
           const alreadyVoted = votedPlayerIds.has(p.id);
           const isMyVote = p.id === myVoteTargetId;
@@ -99,12 +97,6 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
           );
         })}
       </div>
-
-      {hasVoted && notVotedCount > 0 && (
-        <p className="text-text-muted text-xs text-center">
-          Aguardando mais {notVotedCount} {notVotedCount === 1 ? "jogador" : "jogadores"}...
-        </p>
-      )}
     </div>
   );
 }
