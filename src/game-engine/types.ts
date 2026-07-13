@@ -24,7 +24,7 @@ export interface Round {
   winnerId: string | null;
 }
 
-export type RoomStatus = "waiting" | "voting" | "revealing" | "finished";
+export type RoomStatus = "waiting" | "playing" | "voting" | "revealing" | "finished";
 
 export interface Room {
   code: string;
