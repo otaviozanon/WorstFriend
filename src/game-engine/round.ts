@@ -1,7 +1,16 @@
 import { Room, Round, Vote } from "./types";
+import { shuffleDeck } from "./deck";
 
 export function startRound(room: Room): Room {
-  const card = room.deck[room.currentCardIndex];
+  let deck = room.deck;
+  let index = room.currentCardIndex;
+
+  if (index >= deck.length) {
+    deck = shuffleDeck();
+    index = 0;
+  }
+
+  const card = deck[index];
   const round: Round = {
     roundNumber: room.rounds.length + 1,
     card,
@@ -12,6 +21,8 @@ export function startRound(room: Room): Room {
   return {
     ...room,
     status: "voting",
+    deck,
+    currentCardIndex: index,
     rounds: [...room.rounds, round],
   };
 }
