@@ -81,7 +81,7 @@ export default function GameBoard() {
 
   return (
     <main className="min-h-dvh bg-surface p-4">
-      <div className="max-w-2xl mx-auto space-y-6 pt-4 pb-24">
+      <div className="max-w-3xl mx-auto space-y-3 pt-2 pb-20">
         {currentRound && (
           <>
             <CardDisplay
@@ -117,6 +117,8 @@ export default function GameBoard() {
               votesRevealed={room.status === "revealing" || room.status === "finished"}
               voteCounts={voteCounts}
               myVoteTargetId={myVoteTargetId}
+              votedPlayerIds={votedPlayerIds}
+              isVotingPhase={room.status === "voting"}
             />
 
             {room.status === "revealing" && myPlayerId === room.host && (
