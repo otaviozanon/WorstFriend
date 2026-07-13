@@ -54,8 +54,8 @@ export default function GameResult() {
             <div
               className={`absolute inset-0 w-32 h-32 rounded-full border-2 flex items-center justify-center animate-crown-entrance ${
                 gameResult.isTie
-                  ? "bg-accent-warning/15 border-accent-warning/40"
-                  : "bg-brand/15 border-brand/40"
+                  ? "bg-surface-card border-accent-warning/30"
+                  : "bg-surface-card border-brand/30"
               }`}
             >
               <PoopIcon
@@ -72,15 +72,14 @@ export default function GameResult() {
                 Empate!
               </h2>
               <div className="relative inline-block -rotate-2">
-                <div className="bg-accent-warning/10 border border-accent-warning/30 rounded-xl px-5 py-2.5">
-                  <p className="text-accent-warning font-bold text-lg">
+                <div className="bg-surface-card border border-accent-warning/20 rounded-xl px-5 py-2.5">
+                  <p className="text-text-primary font-bold text-lg">
                     {tiePlayers.map((p) => p.name).join(" e ")}
                   </p>
                 </div>
               </div>
-              <div className="inline-flex items-center gap-2 bg-accent-warning/15 border border-accent-warning/30 rounded-full px-4 py-2">
-                <PartyPopper size={18} className="text-accent-warning" />
-                <span className="text-accent-warning font-black text-base">
+              <div className="inline-flex items-center gap-2 bg-surface-card border border-border rounded-full px-4 py-2">
+                <span className="text-text-secondary font-medium text-base">
                   {tiePlayers[0].cardsWon} cartas cada
                 </span>
               </div>
@@ -92,18 +91,17 @@ export default function GameResult() {
                 {gameResult.winner.name}
               </h2>
               <div className="relative inline-block -rotate-2">
-                <div className="relative bg-brand/10 border border-brand/30 rounded-xl px-5 py-2.5">
+                <div className="relative bg-accent-danger/10 border border-accent-danger/30 rounded-xl px-5 py-2.5">
                   <span className="absolute -top-1 -right-1">
-                    <PartyPopper size={18} className="text-brand-light" />
+                    <PartyPopper size={18} className="text-accent-warning" />
                   </span>
-                  <p className="text-brand-light font-bold text-lg">
+                  <p className="text-accent-danger font-bold text-lg">
                     é o(a) Amigo de M*!
                   </p>
                 </div>
               </div>
-              <div className="inline-flex items-center gap-2 bg-brand/20 border border-brand/30 rounded-full px-4 py-2">
-                <PartyPopper size={18} className="text-brand-light" />
-                <span className="text-brand-light font-black text-base">
+              <div className="inline-flex items-center gap-2 bg-surface-card border border-border rounded-full px-4 py-2">
+                <span className="text-text-secondary font-medium text-base">
                   {gameResult.winner.cardsWon} cartas
                 </span>
               </div>
@@ -115,21 +113,22 @@ export default function GameResult() {
           <h3 className="text-sm text-text-muted font-medium px-1">Ranking</h3>
           {gameResult.players.map((p, i) => {
             const isWinner = p.id === gameResult.winner.id && !gameResult.isTie;
+            const isFirst = i === 0;
             return (
               <div
                 key={p.id}
-                className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all animate-slide-up ${
+                className={`flex items-center gap-3 px-5 py-4 rounded-2xl border transition-all animate-slide-up ${
                   isWinner
-                    ? "border-brand/50 bg-brand/10 shadow-lg shadow-brand/15"
-                    : i === 0
-                      ? "border-accent-warning/30 bg-accent-warning/5"
+                    ? "border-brand/30 bg-brand/5"
+                    : isFirst
+                      ? "border-accent-warning/20 bg-surface-raised"
                       : "border-border bg-surface-raised"
                 }`}
                 style={{ animationDelay: `${i * 80}ms`, animationFillMode: "both" }}
               >
                 <span
                   className={`font-mono text-sm w-6 font-bold ${
-                    i === 0 ? "text-brand-light" : "text-text-muted"
+                    isFirst ? "text-brand-light" : "text-text-muted"
                   }`}
                 >
                   #{i + 1}
@@ -142,9 +141,11 @@ export default function GameResult() {
                     <div
                       key={j}
                       className={`w-2.5 h-5 rounded-sm border ${
-                        isWinner || (i === 0 && gameResult.isTie)
-                          ? "bg-brand/80 border-brand/50"
-                          : "bg-surface-overlay border-border"
+                        isWinner
+                          ? "bg-brand/80 border-brand/40"
+                          : isFirst
+                            ? "bg-accent-warning/50 border-accent-warning/30"
+                            : "bg-surface-card border-border"
                       }`}
                     />
                   ))}
@@ -156,7 +157,7 @@ export default function GameResult() {
                 </div>
                 <span
                   className={`font-bold text-sm min-w-[4rem] text-right ${
-                    i === 0 ? "text-brand-light" : "text-text-muted"
+                    isWinner ? "text-brand-light" : "text-text-secondary"
                   }`}
                 >
                   {p.cardsWon} cartas
