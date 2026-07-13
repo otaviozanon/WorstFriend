@@ -60,9 +60,13 @@ export default function GameBoard() {
     : false;
 
   const votedPlayerIds = new Set<string>();
+  let myVoteTargetName: string | null = null;
   if (currentRound) {
     for (const v of currentRound.votes) {
       votedPlayerIds.add(v.playerId);
+      if (v.playerId === myPlayerId && v.targetId) {
+        myVoteTargetName = room.players.find((p) => p.id === v.targetId)?.name ?? null;
+      }
     }
   }
 
@@ -94,6 +98,7 @@ export default function GameBoard() {
                 onVote={handleVote}
                 timeLeft={timeLeft}
                 votedPlayerIds={votedPlayerIds}
+                myVoteTargetName={myVoteTargetName}
               />
             )}
 

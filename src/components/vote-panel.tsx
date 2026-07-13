@@ -10,9 +10,10 @@ interface Props {
   onVote: (targetId: string) => void;
   timeLeft: number;
   votedPlayerIds: Set<string>;
+  myVoteTargetName: string | null;
 }
 
-export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeLeft, votedPlayerIds }: Props) {
+export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeLeft, votedPlayerIds, myVoteTargetName }: Props) {
   const others = players.filter((p) => p.id !== myPlayerId);
   const votedCount = votedPlayerIds.size;
   const notVotedCount = players.filter((p) => p.id !== myPlayerId && !votedPlayerIds.has(p.id)).length;
@@ -31,10 +32,13 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
       </div>
 
       {hasVoted ? (
-        <div className="text-center py-4">
-          <p className="text-text-secondary text-sm animate-pulse">Voto registrado! Aguardando os outros...</p>
+        <div className="text-center py-4 space-y-2">
+          <p className="text-text-secondary text-sm">
+            Voce votou em <strong className="text-brand-light">{myVoteTargetName}</strong>
+          </p>
+          <p className="text-text-muted text-xs animate-pulse">Aguardando os outros...</p>
           {notVotedCount > 0 && (
-            <p className="text-text-muted text-xs mt-2">{notVotedCount} ainda nao votaram</p>
+            <p className="text-text-muted text-xs">{notVotedCount} ainda nao votaram</p>
           )}
         </div>
       ) : (
