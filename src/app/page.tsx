@@ -32,7 +32,7 @@ export default function HomePage() {
 
   const handleJoin = useCallback(() => {
     if (!name.trim()) { setError("Digite seu nome"); return; }
-    if (!roomCode.trim()) { setError("Digite o codigo da sala"); return; }
+    if (!roomCode.trim()) { setError("Digite o código da sala"); return; }
     getSocket().emit("room:join", { roomCode: roomCode.trim().toUpperCase(), playerName: name.trim() });
   }, [name, roomCode, setError]);
 

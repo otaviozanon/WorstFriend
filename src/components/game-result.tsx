@@ -97,7 +97,7 @@ export default function GameResult() {
                     <PartyPopper size={18} className="text-brand-light" />
                   </span>
                   <p className="text-brand-light font-bold text-lg">
-                    e o(a) Amigo de M*!
+                    é o(a) Amigo de M*!
                   </p>
                 </div>
               </div>

@@ -18,7 +18,7 @@ export function startRound(room: Room): Room {
 
 export function recordVote(room: Room, playerId: string, targetId: string): Room {
   if (playerId === targetId) {
-    throw new Error("Voce nao pode votar em si mesmo");
+    throw new Error("Você não pode votar em si mesmo");
   }
   const currentRound = room.rounds[room.rounds.length - 1];
   if (!currentRound) {
@@ -26,7 +26,7 @@ export function recordVote(room: Room, playerId: string, targetId: string): Room
   }
   const alreadyVoted = currentRound.votes.find((v) => v.playerId === playerId);
   if (alreadyVoted) {
-    throw new Error("Voce ja votou nesta rodada");
+    throw new Error("Você já votou nesta rodada");
   }
   const vote: Vote = { playerId, targetId };
   return {

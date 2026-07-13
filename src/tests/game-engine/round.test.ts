@@ -40,7 +40,7 @@ describe("recordVote", () => {
     const room = makeRoom(["Alice", "Bob"]);
     const voting = startRound(room);
     const voterId = voting.players[0].id;
-    expect(() => recordVote(voting, voterId, voterId)).toThrow("Voce nao pode votar em si mesmo");
+    expect(() => recordVote(voting, voterId, voterId)).toThrow("Você não pode votar em si mesmo");
   });
 
   it("throws if player already voted", () => {
@@ -48,7 +48,7 @@ describe("recordVote", () => {
     const voting = startRound(room);
     const [a, b, c] = voting.players;
     const withVote = recordVote(voting, a.id, b.id);
-    expect(() => recordVote(withVote, a.id, c.id)).toThrow("Voce ja votou nesta rodada");
+    expect(() => recordVote(withVote, a.id, c.id)).toThrow("Você já votou nesta rodada");
   });
 });
 

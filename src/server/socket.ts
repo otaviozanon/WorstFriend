@@ -22,7 +22,7 @@ export function setupSocket(io: SocketIOServer): void {
 
     socket.on("room:create", ({ playerName, cardsToWin }: { playerName: string; cardsToWin?: number }) => {
       if (!playerName?.trim()) {
-        socket.emit("error", { message: "Nome nao pode ser vazio" });
+        socket.emit("error", { message: "Nome não pode ser vazio" });
         return;
       }
       const room = createRoom(playerName.trim(), cardsToWin && [4, 5, 7].includes(cardsToWin) ? cardsToWin : 5);
@@ -37,11 +37,11 @@ export function setupSocket(io: SocketIOServer): void {
     socket.on("room:join", ({ roomCode, playerName }: { roomCode: string; playerName: string }) => {
       const room = getRoom(roomCode);
       if (!room) {
-        socket.emit("error", { message: "Sala nao encontrada" });
+        socket.emit("error", { message: "Sala não encontrada" });
         return;
       }
       if (!playerName?.trim()) {
-        socket.emit("error", { message: "Nome nao pode ser vazio" });
+        socket.emit("error", { message: "Nome não pode ser vazio" });
         return;
       }
       try {
@@ -103,7 +103,7 @@ export function setupSocket(io: SocketIOServer): void {
       if (!room || room.status !== "revealing") return;
       const playerId = getPlayerIdBySocketId(socket.id);
       if (room.host !== playerId) {
-        socket.emit("error", { message: "Apenas o host pode avancar" });
+        socket.emit("error", { message: "Apenas o host pode avançar" });
         return;
       }
       if (checkWinCondition(room)) {

@@ -58,7 +58,7 @@ export default function RoomPage() {
             <button onClick={handleCopyCode} className="group flex items-center justify-center gap-3 mx-auto text-3xl font-mono font-bold text-brand-light hover:text-brand tracking-[0.3em] transition-all duration-200 touch-target">
               {room.code}<Copy size={18} />
             </button>
-            <p className="text-text-muted text-xs mt-2">Clique para copiar o codigo</p>
+            <p className="text-text-muted text-xs mt-2">Clique para copiar o código</p>
           </div>
 
           <div className="text-center p-4 rounded-xl bg-surface-raised border border-border">
@@ -79,7 +79,7 @@ export default function RoomPage() {
               <div key={p.id} className="flex items-center gap-3 px-5 py-4 rounded-xl bg-surface-raised border border-border animate-slide-up" style={{ animationDelay: `${i * 50}ms` }}>
                 <div className={`shrink-0 w-3 h-3 rounded-full transition-colors ${p.connected ? "bg-accent-success shadow-[0_0_6px_rgba(34,197,94,0.4)]" : "bg-accent-warning"}`} />
                 <span className="flex-1 text-text-primary font-medium truncate">
-                  {p.name}{p.id === myPlayerId ? <span className="text-text-muted ml-2 text-sm">(voce)</span> : null}
+                  {p.name}{p.id === myPlayerId ? <span className="text-text-muted ml-2 text-sm">(você)</span> : null}
                 </span>
                 {p.id === room.host ? <span className="flex items-center gap-1 text-accent-warning text-xs font-semibold"><Crown size={14} />HOST</span> : null}
                 {!p.connected ? <WifiOff size={14} className="text-accent-warning shrink-0" /> : null}

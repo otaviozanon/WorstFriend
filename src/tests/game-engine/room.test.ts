@@ -44,7 +44,7 @@ describe("joinRoom", () => {
 
   it("throws if room status is not waiting", () => {
     const room = { ...makeWaitingRoom(), status: "playing" as const };
-    expect(() => joinRoom(room, "Bob")).toThrow("Nao e possivel entrar em uma partida em andamento");
+    expect(() => joinRoom(room, "Bob")).toThrow("Não é possível entrar em uma partida em andamento");
   });
 });
 

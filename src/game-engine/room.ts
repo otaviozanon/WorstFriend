@@ -40,7 +40,7 @@ export function createRoom(playerName: string, cardsToWin: number = 5): Room {
 
 export function joinRoom(room: Room, playerName: string): Room {
   if (room.status !== "waiting") {
-    throw new Error("Nao e possivel entrar em uma partida em andamento");
+    throw new Error("Não é possível entrar em uma partida em andamento");
   }
   const newPlayer: Player = {
     id: generateId(),

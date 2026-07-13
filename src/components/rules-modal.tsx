@@ -29,7 +29,7 @@ export default function RulesModal() {
             <div className="space-y-4 text-sm text-text-secondary">
               <div>
                 <h3 className="font-bold text-brand-light mb-1">Objetivo</h3>
-                <p>Seja o primeiro a acumular o numero de cartas definido (4, 5 ou 7) para ser coroado o <strong>Amigo de M*</strong>.</p>
+                <p>Seja o primeiro a acumular o número de cartas definido (4, 5 ou 7) para ser coroado o <strong>Amigo de M*</strong>.</p>
               </div>
 
               <div>
@@ -47,8 +47,8 @@ export default function RulesModal() {
                 <h3 className="font-bold text-brand-light mb-1">Pontuacao</h3>
                 <ul className="list-disc list-inside space-y-1">
                   <li>O jogador mais votado ganha a carta.</li>
-                  <li>Empate: ninguem ganha a carta.</li>
-                  <li>Primeiro a atingir o numero de cartas definido vence.</li>
+                  <li>Empate: ninguém ganha a carta.</li>
+                  <li>Primeiro a atingir o número de cartas definido vence.</li>
                 </ul>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { startRound } from "./round";
 
 export function startGame(room: Room): Room {
   if (room.players.length < 3) {
-    throw new Error("Minimo de 3 jogadores");
+    throw new Error("Mínimo de 3 jogadores");
   }
   return startRound({ ...room, status: "playing" });
 }

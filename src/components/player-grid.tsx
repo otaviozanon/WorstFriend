@@ -77,7 +77,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
             )}
 
             <p className={`text-sm font-semibold truncate ${isMe ? "text-brand-light" : "text-text-primary"}`}>
-              {p.name}{isMe ? " (voce)" : ""}
+              {p.name}{isMe ? " (você)" : ""}
             </p>
 
             {!votesRevealed && p.id === myVoteTargetId && (

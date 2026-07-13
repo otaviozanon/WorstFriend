@@ -21,7 +21,7 @@ describe("startGame", () => {
 
   it("throws if fewer than 3 players", () => {
     const room = makeRoom(["Alice", "Bob"]);
-    expect(() => startGame(room)).toThrow("Minimo de 3 jogadores");
+    expect(() => startGame(room)).toThrow("Mínimo de 3 jogadores");
   });
 });
 
