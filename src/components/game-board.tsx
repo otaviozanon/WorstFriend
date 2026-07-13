@@ -13,7 +13,7 @@ import RulesModal from "./rules-modal";
 
 export default function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
-  const [timeLeft, setTimeLeft] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(15);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const roundRef = useRef<number | null>(null);
@@ -24,7 +24,7 @@ export default function GameBoard() {
 
     if (room.status === "voting" && currentRound.roundNumber !== roundRef.current) {
       roundRef.current = currentRound.roundNumber;
-      setTimeLeft(5);
+      setTimeLeft(15);
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
@@ -59,6 +59,13 @@ export default function GameBoard() {
     ? currentRound.votes.some((v) => v.playerId === myPlayerId)
     : false;
 
+  const votedPlayerIds = new Set<string>();
+  if (currentRound) {
+    for (const v of currentRound.votes) {
+      votedPlayerIds.add(v.playerId);
+    }
+  }
+
   const voteCounts = new Map<string, number>();
   if (currentRound) {
     for (const v of currentRound.votes) {
@@ -86,6 +93,7 @@ export default function GameBoard() {
                 hasVoted={hasVoted}
                 onVote={handleVote}
                 timeLeft={timeLeft}
+                votedPlayerIds={votedPlayerIds}
               />
             )}
 

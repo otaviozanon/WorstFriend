@@ -29,7 +29,7 @@ describe("createRoom", () => {
     expect(room.cardsToWin).toBe(5);
     expect(room.currentCardIndex).toBe(0);
     expect(room.rounds).toEqual([]);
-    expect(room.timerSeconds).toBe(5);
+    expect(room.timerSeconds).toBe(15);
   });
 });
 

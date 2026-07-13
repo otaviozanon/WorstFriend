@@ -10,7 +10,7 @@ import {
 } from "./rooms";
 import { Room } from "@/game-engine/types";
 
-const VOTE_TIMEOUT = 5000;
+const VOTE_TIMEOUT = 15000;
 const REVEAL_TIMEOUT = 3000;
 const DISCONNECT_TIMEOUT = 60000;
 
