@@ -66,7 +66,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
             <div className={`mt-1 mx-auto ${isWinner ? "animate-glow-pulse" : ""}`}>
               {p.cardsWon > 0 ? (
                 <div className="flex items-center justify-center">
-                  {Array.from({ length: Math.min(p.cardsWon, 5) }).map((_, ci) => {
+                  {Array.from({ length: Math.min(p.cardsWon, 7) }).map((_, ci) => {
                     const angle = CARD_ANGLES[ci % CARD_ANGLES.length];
                     const isLastCard = ci === p.cardsWon - 1;
 
@@ -86,8 +86,8 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
                       />
                     );
                   })}
-                  {p.cardsWon > 5 && (
-                    <span className="text-text-muted text-[9px] ml-1">+{p.cardsWon - 5}</span>
+                  {p.cardsWon > 7 && (
+                    <span className="text-text-muted text-[9px] ml-1">+{p.cardsWon - 7}</span>
                   )}
                 </div>
               ) : (

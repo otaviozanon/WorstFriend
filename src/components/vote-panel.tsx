@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Player } from "@/game-engine/types";
-import { Check, UserCheck } from "lucide-react";
+import { Check, UserCheck, ArrowRight } from "lucide-react";
 
 interface Props {
   players: Player[];
@@ -17,6 +18,17 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
   const others = players.filter((p) => p.id !== myPlayerId);
   const votedCount = votedPlayerIds.size;
   const notVotedCount = players.filter((p) => p.id !== myPlayerId && !votedPlayerIds.has(p.id)).length;
+  const [localVote, setLocalVote] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (myVoteTargetId) setLocalVote(myVoteTargetId);
+  }, [myVoteTargetId]);
+
+  const handleVote = (targetId: string) => {
+    if (hasVoted) return;
+    setLocalVote(targetId);
+    onVote(targetId);
+  };
 
   return (
     <div className="w-full max-w-lg mx-auto space-y-2">
@@ -54,24 +66,28 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
         {others.map((p, i) => {
           const alreadyVoted = votedPlayerIds.has(p.id);
           const isMyVote = p.id === myVoteTargetId;
+          const isLocalSelection = !hasVoted && p.id === localVote && !isMyVote;
 
           return (
             <div
               key={p.id}
-              onClick={() => !hasVoted && onVote(p.id)}
+              onClick={() => handleVote(p.id)}
               className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-all duration-200 touch-target flex items-center justify-between ${
                 isMyVote
                   ? "border-brand/50 bg-brand/10 text-brand-light shadow-[0_0_8px_rgba(245,158,11,0.1)]"
-                  : alreadyVoted
-                    ? "border-accent-success/30 bg-accent-success/5 text-accent-success"
-                    : hasVoted
-                      ? "bg-surface-raised border-border text-text-muted"
-                      : "bg-surface-raised border-border hover:border-brand/40 hover:bg-surface-card text-text-primary active:scale-[0.98] cursor-pointer"
+                  : isLocalSelection
+                    ? "border-brand/60 bg-brand/5 text-brand-light animate-pulse"
+                    : alreadyVoted
+                      ? "border-accent-success/30 bg-accent-success/5 text-accent-success"
+                      : hasVoted
+                        ? "bg-surface-raised border-border text-text-muted"
+                        : "bg-surface-raised border-border hover:border-brand/40 hover:bg-surface-card text-text-primary active:scale-[0.98] cursor-pointer"
               }`}
             >
               <span className="truncate">{p.name}</span>
               {isMyVote && <UserCheck size={14} className="text-brand-light shrink-0" />}
-              {alreadyVoted && !isMyVote && <Check size={14} className="shrink-0" />}
+              {isLocalSelection && <ArrowRight size={14} className="text-brand-light shrink-0 animate-pulse" />}
+              {alreadyVoted && !isMyVote && !isLocalSelection && <Check size={14} className="shrink-0" />}
             </div>
           );
         })}
