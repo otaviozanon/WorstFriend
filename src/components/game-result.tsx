@@ -87,11 +87,11 @@ export default function GameResult() {
                 {gameResult.winner.name}
               </h2>
               <div className="relative inline-block -rotate-3">
-                <div className="relative bg-accent-danger/10 border border-accent-danger/30 rounded-xl px-5 py-2.5">
-                  <span className="absolute -top-1 -right-1">
-                    <PartyPopper size={18} className="text-accent-warning" />
+                <div className="relative bg-accent-danger/10 border-2 border-accent-danger/40 rounded-xl px-6 py-3 shadow-lg shadow-accent-danger/10">
+                  <span className="absolute -top-2 -right-2">
+                    <PartyPopper size={22} className="text-accent-warning" />
                   </span>
-                  <p className="text-accent-danger font-bold text-lg">
+                  <p className="text-accent-danger font-black text-xl">
                     é o(a) Amigo de M*!
                   </p>
                 </div>
