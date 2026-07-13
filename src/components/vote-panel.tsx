@@ -22,7 +22,7 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
     <div className="w-full max-w-lg mx-auto space-y-4">
       <div className="flex items-center justify-center gap-3">
         <div className={`text-3xl font-mono font-black transition-colors duration-300 ${
-          timeLeft <= 3 ? "text-accent-danger animate-pulse" : "text-brand-light"
+          timeLeft <= 5 ? "text-accent-danger animate-pulse" : "text-brand-light"
         }`}>
           {timeLeft}s
         </div>

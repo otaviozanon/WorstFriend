@@ -10,8 +10,9 @@ import {
 } from "./rooms";
 import { Room } from "@/game-engine/types";
 
-const VOTE_TIMEOUT = 15000;
-const REVEAL_TIMEOUT = 3000;
+const VOTE_TIMEOUT = 30000;
+const REVEAL_DELAY = 3000;
+const REVEAL_FAST = 500;
 const DISCONNECT_TIMEOUT = 60000;
 
 export function setupSocket(io: SocketIOServer): void {
@@ -87,7 +88,7 @@ export function setupSocket(io: SocketIOServer): void {
         setRoom(room.code, updated);
         if (allVotesIn(updated)) {
           clearVoteTimer(room.code);
-          finishVoting(room.code, updated, io);
+          finishVoting(room.code, updated, io, true);
         }
       } catch (e: any) {
         socket.emit("error", { message: e.message });
@@ -161,7 +162,7 @@ function startVoteTimer(roomCode: string, room: Room, io: SocketIOServer): void 
   voteTimers.set(roomCode, setTimeout(() => {
     const current = getRoom(roomCode);
     if (current && current.status === "voting") {
-      finishVoting(roomCode, current, io);
+      finishVoting(roomCode, current, io, false);
     }
   }, VOTE_TIMEOUT));
 }
@@ -174,7 +175,7 @@ function clearVoteTimer(roomCode: string): void {
   }
 }
 
-function finishVoting(roomCode: string, room: Room, io: SocketIOServer): void {
+function finishVoting(roomCode: string, room: Room, io: SocketIOServer, immediate: boolean): void {
   const resolved = resolveRound(room);
   setRoom(roomCode, resolved);
   io.to(roomCode).emit("room:state", resolved);
@@ -194,5 +195,5 @@ function finishVoting(roomCode: string, room: Room, io: SocketIOServer): void {
       io.to(roomCode).emit("room:state", nextRound);
       startVoteTimer(roomCode, nextRound, io);
     }
-  }, REVEAL_TIMEOUT);
+  }, immediate ? REVEAL_FAST : REVEAL_DELAY);
 }

@@ -32,7 +32,7 @@ export function createRoom(playerName: string): Room {
     deck: shuffleDeck(),
     currentCardIndex: 0,
     rounds: [],
-    timerSeconds: 15,
+    timerSeconds: 30,
     winnerId: null,
     playAgainVotes: [],
   };
