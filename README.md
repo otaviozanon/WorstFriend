@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">WorstFriend</h1>
-<p align="center"><strong>Amigos de M*</strong> — Versão online do clássico jogo de cartas brasileiro</p>
+<p align="center"><strong>Amigos de M*</strong> — Um verdadeiro validador para o amigo mais m*</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/jogadores-3%2B-orange" />
