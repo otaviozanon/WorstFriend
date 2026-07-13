@@ -10,6 +10,8 @@ interface Props {
   voteCounts: Map<string, number>;
 }
 
+const VOTE_REVEAL_DELAY = 200;
+
 const AVATAR_COLORS = [
   "bg-amber-500 text-surface",
   "bg-violet-500 text-white",
@@ -25,7 +27,7 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
 
   useEffect(() => {
     if (step < votes.length) {
-      const timer = setTimeout(() => setStep((s) => s + 1), 200);
+      const timer = setTimeout(() => setStep((s) => s + 1), VOTE_REVEAL_DELAY);
       return () => clearTimeout(timer);
     }
   }, [step, votes.length]);

@@ -10,9 +10,10 @@ export default function RulesModal() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 w-12 h-12 rounded-full bg-surface-raised border border-border flex items-center justify-center text-text-muted hover:text-text-primary hover:border-brand/30 transition-all duration-200 touch-target z-40"
+        className="fixed bottom-4 right-4 rounded-full bg-surface-raised border border-border flex items-center gap-2 px-4 py-2 text-text-muted hover:text-text-primary hover:border-brand/30 transition-all duration-200 touch-target z-40"
       >
         <BookOpen size={20} />
+        <span className="text-sm font-medium">Regras</span>
       </button>
 
       {open && (

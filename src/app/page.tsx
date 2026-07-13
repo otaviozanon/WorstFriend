@@ -80,9 +80,9 @@ export default function HomePage() {
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-white/5" />
+            <div className="flex-1 h-px bg-text-primary/5" />
             <span className="text-text-muted text-xs font-medium">ou entre em uma sala</span>
-            <div className="flex-1 h-px bg-white/5" />
+            <div className="flex-1 h-px bg-text-primary/5" />
           </div>
 
           <div className="flex gap-2">

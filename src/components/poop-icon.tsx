@@ -1,3 +1,4 @@
+// SVG source of truth: public/poop.svg
 interface Props {
   size?: number;
   className?: string;

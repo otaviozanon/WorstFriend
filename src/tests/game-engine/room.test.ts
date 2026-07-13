@@ -25,7 +25,7 @@ describe("createRoom", () => {
   it("initializes with status waiting and shuffled deck", () => {
     const room = createRoom("Alice");
     expect(room.status).toBe("waiting");
-    expect(room.deck).toHaveLength(84);
+    expect(room.deck).toHaveLength(134);
     expect(room.cardsToWin).toBe(5);
     expect(room.currentCardIndex).toBe(0);
     expect(room.rounds).toEqual([]);
