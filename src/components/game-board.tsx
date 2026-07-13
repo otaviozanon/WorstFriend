@@ -97,7 +97,6 @@ export default function GameBoard() {
                 hasVoted={hasVoted}
                 onVote={handleVote}
                 timeLeft={timeLeft}
-                votedPlayerIds={votedPlayerIds}
                 myVoteTargetId={myVoteTargetId}
               />
             )}

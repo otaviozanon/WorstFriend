@@ -18,9 +18,33 @@ const CARD_ANGLES = [-3, 0, 3];
 
 export default function PlayerGrid({ players, myPlayerId, winnerId, votesRevealed, voteCounts, myVoteTargetId, votedPlayerIds, isVotingPhase }: Props) {
   const cols = players.length <= 6 ? "grid-cols-2 sm:grid-cols-3" : players.length <= 12 ? "grid-cols-3 sm:grid-cols-4" : "grid-cols-4 sm:grid-cols-5";
+  const others = players.filter(p => p.id !== myPlayerId);
+  const votedCount = isVotingPhase && votedPlayerIds ? votedPlayerIds.size : 0;
 
   return (
-    <div className={`grid ${cols} gap-2.5`}>
+    <div className="space-y-3">
+      {isVotingPhase && (
+        <div className="flex items-center justify-center gap-2">
+          <div className="flex -space-x-1">
+            {others.slice(0, 6).map((p, i) => {
+              const v = votedPlayerIds?.has(p.id);
+              return (
+                <div key={p.id} className={`w-6 h-6 rounded-full border-2 border-surface flex items-center justify-center text-[10px] font-bold transition-all duration-300 ${
+                  v ? "bg-accent-success text-surface scale-100" : "bg-surface-card text-text-muted scale-90"
+                }`} style={{ zIndex: v ? 10 : 5 - i }}>
+                  {v ? <Check size={11} strokeWidth={3} /> : "?"}
+                </div>
+              );
+            })}
+            {others.length > 6 && (
+              <span className="text-text-muted text-[10px] self-center ml-1">+{others.length - 6}</span>
+            )}
+          </div>
+          <span className="text-text-muted text-xs">{votedCount}/{others.length}</span>
+        </div>
+      )}
+
+      <div className={`grid ${cols} gap-2.5`}>
       {players.map((p, i) => {
         const count = votesRevealed ? (voteCounts.get(p.id) || 0) : 0;
         const isWinner = votesRevealed && p.id === winnerId;
@@ -103,6 +127,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
           </div>
         );
       })}
+    </div>
     </div>
   );
 }
