@@ -76,3 +76,21 @@
  ✓ Compiled in 1180ms (740 modules)
  ✓ Compiled in 1138ms (740 modules)
  ✓ Compiled in 879ms (740 modules)
+ ✓ Compiled in 505ms (309 modules)
+ GET / 200 in 189ms
+ GET / 200 in 46ms
+ GET / 200 in 42ms
+ GET /sala/883K3O 200 in 37ms
+ GET /sala/883K3O 200 in 28ms
+ GET /sala/883K3O 200 in 28ms
+ GET /sala/883K3O 200 in 52ms
+ GET / 200 in 23ms
+ GET /sala/883K3O 200 in 28ms
+ GET /sala/883K3O 200 in 46ms
+ GET / 200 in 21ms
+ GET /sala/883K3O 200 in 47ms
+ GET / 200 in 20ms
+ GET /sala/A3ARQY 200 in 28ms
+ GET /sala/A3ARQY 200 in 53ms
+ GET / 200 in 19ms
+ GET /sala/A3ARQY 200 in 26ms
