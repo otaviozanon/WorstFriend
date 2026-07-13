@@ -6,9 +6,9 @@
 <p align="center"><strong>Amigos de M*</strong> — Versao online do classico jogo de cartas brasileiro</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/jogadores-3%20a%2012-orange" />
+  <img src="https://img.shields.io/badge/jogadores-3%2B-orange" />
   <img src="https://img.shields.io/badge/cartas-4%2C%205%20ou%207-yellow" />
-  <img src="https://img.shields.io/badge/perguntas-engracadas-red" />
+  <img src="https://img.shields.io/badge/perguntas-150-red" />
   <img src="https://img.shields.io/badge/multiplayer-online-green" />
 </p>
 
@@ -109,6 +109,22 @@ tests/              # Testes do game-engine
 
 ---
 
+## Como Jogar Online
+
+1. Crie uma sala e compartilhe o **codigo de 6 digitos** ou o link
+2. Seus amigos entram na sala (3+ jogadores, sem limite)
+3. O host escolhe **4, 5 ou 7 cartas** para vencer
+4. **30 segundos** por rodada para votar. Votos sao secretos!
+
+---
+
+## 150 Cartas
+
+Perguntas sobre comportamentos, habitos questionaveis e situacoes constrangedoras entre amigos — do classico "Quem peida no elevador?" ao profundo "Quem venderia a alma por um combo do McDonalds?".
+
+---
+
 <p align="center">
-  Feito com 💩 por amigos que nao se levam a serio
+  Feito com 💩 por amigos que nao se levam a serio<br />
+  Jogo original: <strong>Amigos de Merda</strong> por Buró Brasil
 </p>
