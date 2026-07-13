@@ -114,7 +114,7 @@ tests/              # Testes do game-engine
 1. Crie uma sala e compartilhe o **codigo de 6 digitos** ou o link
 2. Seus amigos entram na sala (3+ jogadores, sem limite)
 3. O host escolhe **4, 5 ou 7 cartas** para vencer
-4. **30 segundos** por rodada para votar. Votos sao secretos!
+4. **30 segundos** por rodada para votar. O mais votado ganha a carta!
 
 ---
 
