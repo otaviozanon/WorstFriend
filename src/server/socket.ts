@@ -11,8 +11,6 @@ import {
 import { Room } from "@/game-engine/types";
 
 const VOTE_TIMEOUT = 30000;
-const REVEAL_DELAY = 3000;
-const REVEAL_FAST = 500;
 const DISCONNECT_TIMEOUT = 60000;
 
 export function setupSocket(io: SocketIOServer): void {
@@ -92,6 +90,28 @@ export function setupSocket(io: SocketIOServer): void {
         }
       } catch (e: any) {
         socket.emit("error", { message: e.message });
+      }
+    });
+
+    socket.on("game:nextRound", () => {
+      const room = getRoomBySocketId(socket.id);
+      if (!room || room.status !== "revealing") return;
+      const playerId = getPlayerIdBySocketId(socket.id);
+      if (room.host !== playerId) {
+        socket.emit("error", { message: "Apenas o host pode avancar" });
+        return;
+      }
+      if (checkWinCondition(room)) {
+        const winnerId = buildGameResult(room.players).winner.id;
+        const finished = { ...room, status: "finished" as const, winnerId };
+        setRoom(room.code, finished);
+        io.to(room.code).emit("room:state", finished);
+        io.to(room.code).emit("game:end", buildGameResult(room.players));
+      } else {
+        const nextRound = startRound({ ...room, status: "playing" });
+        setRoom(room.code, nextRound);
+        io.to(room.code).emit("room:state", nextRound);
+        startVoteTimer(room.code, nextRound, io);
       }
     });
 
@@ -179,21 +199,4 @@ function finishVoting(roomCode: string, room: Room, io: SocketIOServer, immediat
   const resolved = resolveRound(room);
   setRoom(roomCode, resolved);
   io.to(roomCode).emit("room:state", resolved);
-
-  setTimeout(() => {
-    const r = getRoom(roomCode);
-    if (!r) return;
-    if (checkWinCondition(r)) {
-      const winnerId = buildGameResult(r.players).winner.id;
-      const finished = { ...r, status: "finished" as const, winnerId };
-      setRoom(roomCode, finished);
-      io.to(roomCode).emit("room:state", finished);
-      io.to(roomCode).emit("game:end", buildGameResult(r.players));
-    } else {
-      const nextRound = startRound({ ...r, status: "playing" });
-      setRoom(roomCode, nextRound);
-      io.to(roomCode).emit("room:state", nextRound);
-      startVoteTimer(roomCode, nextRound, io);
-    }
-  }, immediate ? REVEAL_FAST : REVEAL_DELAY);
 }

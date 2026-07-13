@@ -9,11 +9,12 @@ interface Props {
   winnerId: string | null;
   votesRevealed: boolean;
   voteCounts: Map<string, number>;
+  myVoteTargetId?: string | null;
 }
 
 const CARD_ANGLES = [-3, 0, 3];
 
-export default function PlayerGrid({ players, myPlayerId, winnerId, votesRevealed, voteCounts }: Props) {
+export default function PlayerGrid({ players, myPlayerId, winnerId, votesRevealed, voteCounts, myVoteTargetId }: Props) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
       {players.map((p, i) => {
@@ -39,6 +40,12 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
             <p className={`font-semibold truncate ${isMe ? "text-brand-light" : "text-text-primary"}`}>
               {p.name}{isMe ? " (voce)" : ""}
             </p>
+
+            {!votesRevealed && p.id === myVoteTargetId && (
+              <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-brand/20 border border-brand/30 text-brand-light text-[10px] font-semibold">
+                seu voto
+              </span>
+            )}
 
             <div
               className={`mt-3 mx-auto rounded-lg p-1 ${

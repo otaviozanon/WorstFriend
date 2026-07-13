@@ -116,7 +116,19 @@ export default function GameBoard() {
               winnerId={currentRound.winnerId}
               votesRevealed={room.status === "revealing" || room.status === "finished"}
               voteCounts={voteCounts}
+              myVoteTargetId={myVoteTargetId}
             />
+
+            {room.status === "revealing" && myPlayerId === room.host && (
+              <div className="flex justify-center pt-2">
+                <button
+                  onClick={() => getSocket().emit("game:nextRound")}
+                  className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand to-brand-dark hover:from-brand-light hover:to-brand text-black font-bold text-lg transition-all duration-200 active:scale-[0.98] shadow-lg shadow-brand/30"
+                >
+                  Proxima Carta
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

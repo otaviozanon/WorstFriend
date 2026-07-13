@@ -20,16 +20,32 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
 
   return (
     <div className="w-full max-w-lg mx-auto space-y-4">
-      <div className="flex items-center justify-center gap-3">
-        <div className={`text-3xl font-mono font-black transition-colors duration-300 ${
-          timeLeft <= 5 ? "text-accent-danger animate-pulse" : "text-brand-light"
-        }`}>
-          {timeLeft}s
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-1">
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center border-3 transition-all duration-500 ${
+            timeLeft <= 5
+              ? "border-accent-danger bg-accent-danger/10 animate-pulse"
+              : "border-brand bg-brand/5"
+          }`}>
+            <span className={`text-xl font-black font-mono ${
+              timeLeft <= 5 ? "text-accent-danger" : "text-brand-light"
+            }`}>
+              {timeLeft}
+            </span>
+          </div>
+          <span className="text-text-muted text-[10px]">segundos</span>
         </div>
         <span className="text-text-muted text-xs">
           {votedCount}/{players.length - 1} votaram
         </span>
       </div>
+
+      {hasVoted && myVoteTargetId && (
+        <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-brand/10 border border-brand/20 text-brand-light text-sm font-medium animate-slide-up">
+          <UserCheck size={16} />
+          Voce votou em <strong className="ml-1">{players.find(p => p.id === myVoteTargetId)?.name}</strong>
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         {!hasVoted && (
