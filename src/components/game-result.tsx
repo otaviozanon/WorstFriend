@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
 import { RotateCcw, PartyPopper } from "lucide-react";
+import PoopIcon from "./poop-icon";
 import RulesModal from "./rules-modal";
 
 const CONFETTI_DOTS = [
@@ -57,10 +58,9 @@ export default function GameResult() {
                   : "bg-brand/15 border-brand/40"
               }`}
             >
-              <img
-                src="/poop.svg"
-                alt="Amigo de M*"
-                className={`w-16 h-16 ${gameResult.isTie ? "opacity-70" : ""}`}
+              <PoopIcon
+                size={64}
+                className={gameResult.isTie ? "text-accent-warning" : "text-brand-light"}
               />
             </div>
           </div>
