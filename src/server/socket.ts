@@ -3,6 +3,7 @@ import { createRoom, joinRoom, removePlayer, setPlayerDisconnected } from "@/gam
 import { startGame, checkWinCondition } from "@/game-engine/game";
 import { recordVote, resolveRound, startRound, allVotesIn } from "@/game-engine/round";
 import { buildGameResult } from "@/game-engine/scoring";
+import { shuffleDeck } from "@/game-engine/deck";
 import {
   getRoom, setRoom, deleteRoom,
   mapSocketToPlayer, removeSocketMapping,
@@ -132,7 +133,7 @@ export function setupSocket(io: SocketIOServer): void {
       io.to(room.code).emit("room:state", updated);
 
       if (votes.length >= connectedPlayers && connectedPlayers >= 3) {
-        const resetRoom: Room = {
+          const resetRoom: Room = {
           ...room,
           status: "playing",
           cardsToWin: room.cardsToWin,
@@ -140,7 +141,7 @@ export function setupSocket(io: SocketIOServer): void {
           rounds: [],
           winnerId: null,
           playAgainVotes: [],
-          deck: room.deck,
+          deck: shuffleDeck(),
           players: room.players.map((p) => ({
             ...p,
             cardsWon: 0,
