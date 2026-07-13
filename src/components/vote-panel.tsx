@@ -31,37 +31,54 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto space-y-2">
-      <div className="flex items-center justify-center gap-3">
-        <div className="flex flex-col items-center gap-0.5">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
+    <div className="w-full max-w-lg mx-auto space-y-3">
+      <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center gap-2">
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
             timeLeft <= 5
               ? "border-accent-danger bg-accent-danger/10 animate-pulse"
               : "border-brand bg-brand/5"
           }`}>
-            <span className={`text-lg font-black font-mono ${
+            <span className={`text-base font-black font-mono ${
               timeLeft <= 5 ? "text-accent-danger" : "text-brand-light"
             }`}>
               {timeLeft}
             </span>
           </div>
-          <span className="text-text-muted text-[9px]">s</span>
         </div>
-        <span className="text-text-muted text-xs">
-          {votedCount}/{players.length - 1} votaram
-        </span>
+
+        <div className="flex items-center gap-1.5">
+          <div className="flex -space-x-1">
+            {players.filter(p => p.id !== myPlayerId).slice(0, 5).map((p, i) => {
+              const v = votedPlayerIds.has(p.id);
+              return (
+                <div key={p.id} className={`w-5 h-5 rounded-full border-2 border-surface flex items-center justify-center text-[9px] font-bold transition-all duration-300 ${
+                  v ? "bg-accent-success text-surface scale-100" : "bg-surface-card text-text-muted scale-90"
+                }`} style={{ zIndex: v ? 10 : 5 - i }}>
+                  {v ? <Check size={10} strokeWidth={3} /> : "?"}
+                </div>
+              );
+            })}
+            {others.length > 5 && (
+              <span className="text-text-muted text-[9px] self-center ml-1">+{others.length - 5}</span>
+            )}
+          </div>
+          <span className="text-text-muted text-xs">
+            {votedCount}/{others.length}
+          </span>
+        </div>
       </div>
 
       {hasVoted && myVoteTargetId && (
-        <div className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand/10 border border-brand/20 text-brand-light text-xs font-medium animate-slide-up">
-          <UserCheck size={14} />
-          Voto: <strong className="ml-0.5">{players.find(p => p.id === myVoteTargetId)?.name}</strong>
+        <div className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-medium animate-slide-up">
+          <UserCheck size={12} />
+          Voce votou em <strong className="ml-1">{players.find(p => p.id === myVoteTargetId)?.name}</strong>
         </div>
       )}
 
-      <div className="flex flex-col gap-1">
-        {!hasVoted && (
-          <p className="text-text-muted text-[11px] text-center">Escolha:</p>
+      <div className="flex flex-wrap justify-center gap-1.5">
+        {!hasVoted && others.length > 0 && (
+          <p className="w-full text-text-muted text-[10px] text-center mb-1">Toque em um jogador para votar:</p>
         )}
         {others.map((p, i) => {
           const alreadyVoted = votedPlayerIds.has(p.id);
@@ -69,32 +86,35 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
           const isLocalSelection = !hasVoted && p.id === localVote && !isMyVote;
 
           return (
-            <div
+            <button
               key={p.id}
               onClick={() => handleVote(p.id)}
-              className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-all duration-200 touch-target flex items-center justify-between ${
+              disabled={hasVoted}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all duration-200 active:scale-95 ${
                 isMyVote
-                  ? "border-brand/50 bg-brand/10 text-brand-light shadow-[0_0_8px_rgba(245,158,11,0.1)]"
+                  ? "border-brand bg-brand/10 text-brand-light"
                   : isLocalSelection
                     ? "border-brand/60 bg-brand/5 text-brand-light animate-pulse"
                     : alreadyVoted
-                      ? "border-accent-success/30 bg-accent-success/5 text-accent-success"
+                      ? "border-accent-success/30 bg-accent-success/5 text-accent-success cursor-default"
                       : hasVoted
-                        ? "bg-surface-raised border-border text-text-muted"
-                        : "bg-surface-raised border-border hover:border-brand/40 hover:bg-surface-card text-text-primary active:scale-[0.98] cursor-pointer"
+                        ? "border-border bg-surface-raised text-text-muted cursor-default"
+                        : "border-border bg-surface-raised hover:border-brand/40 hover:bg-surface-card text-text-primary"
               }`}
             >
-              <span className="truncate">{p.name}</span>
-              {isMyVote && <UserCheck size={14} className="text-brand-light shrink-0" />}
-              {isLocalSelection && <ArrowRight size={14} className="text-brand-light shrink-0 animate-pulse" />}
-              {alreadyVoted && !isMyVote && !isLocalSelection && <Check size={14} className="shrink-0" />}
-            </div>
+              {p.name}
+              {isMyVote && <UserCheck size={12} />}
+              {isLocalSelection && <ArrowRight size={12} className="animate-pulse" />}
+              {alreadyVoted && !isMyVote && !isLocalSelection && <Check size={12} />}
+            </button>
           );
         })}
       </div>
 
       {hasVoted && notVotedCount > 0 && (
-        <p className="text-text-muted text-[11px] text-center">{notVotedCount} ainda nao votaram</p>
+        <p className="text-text-muted text-[10px] text-center">
+          Aguardando mais {notVotedCount} {notVotedCount === 1 ? "jogador" : "jogadores"}...
+        </p>
       )}
     </div>
   );

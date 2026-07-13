@@ -84,6 +84,7 @@ export function setupSocket(io: SocketIOServer): void {
       try {
         const updated = recordVote(room, playerId, targetId);
         setRoom(room.code, updated);
+        io.to(room.code).emit("room:state", updated);
         if (allVotesIn(updated)) {
           clearVoteTimer(room.code);
           finishVoting(room.code, updated, io, true);
