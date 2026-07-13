@@ -41,7 +41,7 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
       map.set(p.id, {
         name: p.name,
         initial: p.name.charAt(0).toUpperCase(),
-        color: AVATAR_COLORS[Math.abs(idx) % AVATAR_COLORS.length],
+        color: AVATAR_COLORS[idx % AVATAR_COLORS.length],
       });
     });
     return map;

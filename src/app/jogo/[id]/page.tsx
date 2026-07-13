@@ -5,8 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 import { useGameStore } from "@/lib/store";
 import GameBoard from "@/components/game-board";
 
-export const dynamic = "force-dynamic";
-
 export default function GamePage() {
   const router = useRouter();
   const { room } = useGameStore();

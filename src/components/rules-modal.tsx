@@ -35,7 +35,7 @@ export default function RulesModal() {
                 <h3 className="font-bold text-brand-light mb-1">Como Jogar</h3>
                 <ol className="list-decimal list-inside space-y-1">
                   <li>O sistema revela uma carta com uma pergunta.</li>
-                  <li>Todos tem <strong>5 segundos</strong> para votar em quem melhor se encaixa na pergunta.</li>
+                  <li>Todos tem <strong>30 segundos</strong> para votar em quem melhor se encaixa na pergunta.</li>
                   <li>NAO pode votar em si mesmo.</li>
                   <li>Votos sao secretos ate o fim do tempo.</li>
                   <li>Quem nao votar no prazo, perde o voto.</li>

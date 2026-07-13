@@ -2,3 +2,7 @@ node_modules/
 .next/
 dist/
 .superpowers/
+docs/
+*.log
+test-output.txt
+*.tsbuildinfo

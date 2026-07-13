@@ -1,4 +1,4 @@
-import { Room, Round, Vote, Card } from "./types";
+import { Room, Round, Vote } from "./types";
 
 export function startRound(room: Room): Room {
   const card = room.deck[room.currentCardIndex];

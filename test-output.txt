@@ -1,9 +1,0 @@
-﻿
-[full output: ~/AppData\Local\rtk\tee\1783924892_vitest_run.log]
-rtk : [RTK:PASSTHROUGH] vitest parser: All parsing tiers failed
-At line:1 char:1
-+ rtk vitest tests/e2e/full-game.test.ts --timeout 30000 2>&1 | Out-Fil ...
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: ([RTK:PASSTHROUG...ng tiers failed:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 

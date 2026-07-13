@@ -7,8 +7,6 @@ import { useGameStore } from "@/lib/store";
 import { Copy, Play, Users, Crown, WifiOff } from "lucide-react";
 import RulesModal from "@/components/rules-modal";
 
-export const dynamic = "force-dynamic";
-
 export default function RoomPage() {
   const router = useRouter();
   const params = useParams();

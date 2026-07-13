@@ -28,7 +28,7 @@ export default function HomePage() {
   const handleCreate = useCallback(() => {
     if (!name.trim()) { setError("Digite seu nome"); return; }
     getSocket().emit("room:create", { playerName: name.trim(), cardsToWin });
-  }, [name, setError]);
+  }, [name, cardsToWin, setError]);
 
   const handleJoin = useCallback(() => {
     if (!name.trim()) { setError("Digite seu nome"); return; }

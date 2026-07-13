@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
-import { Round } from "@/game-engine/types";
 import CardDisplay from "./card-display";
 import PlayerGrid from "./player-grid";
 import VotePanel from "./vote-panel";
@@ -24,7 +23,7 @@ export default function GameBoard() {
 
     if (room.status === "voting" && currentRound.roundNumber !== roundRef.current) {
       roundRef.current = currentRound.roundNumber;
-      setTimeLeft(30);
+      setTimeLeft(room.timerSeconds);
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {

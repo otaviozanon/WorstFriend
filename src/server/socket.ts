@@ -13,6 +13,10 @@ import { Room } from "@/game-engine/types";
 const VOTE_TIMEOUT = 30000;
 const DISCONNECT_TIMEOUT = 60000;
 
+function getErrorMessage(e: unknown): string {
+  return e instanceof Error ? e.message : "Erro inesperado";
+}
+
 export function setupSocket(io: SocketIOServer): void {
   io.on("connection", (socket: Socket) => {
 
@@ -48,8 +52,8 @@ export function setupSocket(io: SocketIOServer): void {
         socket.join(roomCode);
         socket.emit("player:id", player.id);
         io.to(roomCode).emit("room:state", updated);
-      } catch (e: any) {
-        socket.emit("error", { message: e.message });
+      } catch (e) {
+        socket.emit("error", { message: getErrorMessage(e) });
       }
     });
 
@@ -70,9 +74,9 @@ export function setupSocket(io: SocketIOServer): void {
         const playing = startGame(withCardsWin);
         setRoom(room.code, playing);
         io.to(room.code).emit("room:state", playing);
-        startVoteTimer(room.code, playing, io);
-      } catch (e: any) {
-        socket.emit("error", { message: e.message });
+        startVoteTimer(room.code, io);
+      } catch (e) {
+        socket.emit("error", { message: getErrorMessage(e) });
       }
     });
 
@@ -89,8 +93,8 @@ export function setupSocket(io: SocketIOServer): void {
           clearVoteTimer(room.code);
           finishVoting(room.code, updated, io, true);
         }
-      } catch (e: any) {
-        socket.emit("error", { message: e.message });
+      } catch (e) {
+        socket.emit("error", { message: getErrorMessage(e) });
       }
     });
 
@@ -112,7 +116,7 @@ export function setupSocket(io: SocketIOServer): void {
         const nextRound = startRound({ ...room, status: "playing" });
         setRoom(room.code, nextRound);
         io.to(room.code).emit("room:state", nextRound);
-        startVoteTimer(room.code, nextRound, io);
+        startVoteTimer(room.code, io);
       }
     });
 
@@ -145,7 +149,7 @@ export function setupSocket(io: SocketIOServer): void {
         const restarted = startRound(resetRoom);
         setRoom(room.code, restarted);
         io.to(room.code).emit("room:state", restarted);
-        startVoteTimer(room.code, restarted, io);
+        startVoteTimer(room.code, io);
       }
     });
 
@@ -178,7 +182,7 @@ export function setupSocket(io: SocketIOServer): void {
 
 const voteTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
-function startVoteTimer(roomCode: string, room: Room, io: SocketIOServer): void {
+function startVoteTimer(roomCode: string, io: SocketIOServer): void {
   clearVoteTimer(roomCode);
   voteTimers.set(roomCode, setTimeout(() => {
     const current = getRoom(roomCode);
