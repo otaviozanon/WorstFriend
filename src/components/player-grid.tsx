@@ -20,7 +20,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
   const cols = players.length <= 6 ? "grid-cols-2 sm:grid-cols-3" : players.length <= 12 ? "grid-cols-3 sm:grid-cols-4" : "grid-cols-4 sm:grid-cols-5";
 
   return (
-    <div className={`grid ${cols} gap-2`}>
+    <div className={`grid ${cols} gap-2.5`}>
       {players.map((p, i) => {
         const count = votesRevealed ? (voteCounts.get(p.id) || 0) : 0;
         const isWinner = votesRevealed && p.id === winnerId;
@@ -32,7 +32,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
         return (
           <div
             key={p.id}
-            className={`relative rounded-lg p-2 text-center border transition-all duration-300 animate-slide-up ${
+            className={`relative rounded-xl p-3 text-center border transition-all duration-300 animate-slide-up ${
               isWinner
                 ? "border-brand/50 bg-brand/5"
                 : hasVoted
@@ -42,28 +42,28 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
             style={{ animationDelay: `${i * 40}ms` }}
           >
             {p.isHost && (
-              <Crown size={10} className="absolute top-1 right-1 text-accent-warning" />
+              <Crown size={12} className="absolute top-1.5 right-1.5 text-accent-warning" />
             )}
 
             {hasVoted && (
-              <Check size={10} className="absolute top-1 left-1 text-accent-success" />
+              <Check size={12} className="absolute top-1.5 left-1.5 text-accent-success" />
             )}
 
             {notVoted && (
-              <Clock size={10} className="absolute top-1 left-1 text-text-muted" />
+              <Clock size={12} className="absolute top-1.5 left-1.5 text-text-muted" />
             )}
 
-            <p className={`text-xs font-semibold truncate ${isMe ? "text-brand-light" : "text-text-primary"}`}>
+            <p className={`text-sm font-semibold truncate ${isMe ? "text-brand-light" : "text-text-primary"}`}>
               {p.name}{isMe ? " (voce)" : ""}
             </p>
 
             {!votesRevealed && p.id === myVoteTargetId && (
-              <span className="inline-block mt-0.5 px-1.5 py-px rounded-full bg-brand/20 border border-brand/30 text-brand-light text-[9px] font-semibold">
+              <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-brand/20 border border-brand/30 text-brand-light text-[10px] font-semibold">
                 seu voto
               </span>
             )}
 
-            <div className="mt-1 mx-auto">
+            <div className="mt-1.5 mx-auto">
               {p.cardsWon > 0 ? (
                 <div className="flex items-center justify-center">
                   {Array.from({ length: Math.min(p.cardsWon, 7) }).map((_, ci) => {
@@ -73,11 +73,11 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
                     return (
                       <div
                         key={ci}
-                        className={`w-4 h-5 rounded-[3px] bg-surface-card transition-all duration-300 border border-brand/40 ${
+                        className={`w-5 h-7 rounded-[3px] bg-surface-card transition-all duration-300 border border-brand/40 ${
                           isLastCard && wonThisRound ? "animate-bounce-in" : "animate-card-in"}
                         }`}
                         style={{
-                          marginLeft: ci > 0 ? "-8px" : 0,
+                          marginLeft: ci > 0 ? "-10px" : 0,
                           rotate: `${angle}deg`,
                           animationDelay: isLastCard && wonThisRound ? "200ms" : `${ci * 40}ms`,
                         }}
@@ -85,18 +85,18 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
                     );
                   })}
                   {p.cardsWon > 7 && (
-                    <span className="text-text-muted text-[9px] ml-1">+{p.cardsWon - 7}</span>
+                    <span className="text-text-muted text-[10px] ml-1">+{p.cardsWon - 7}</span>
                   )}
                 </div>
               ) : (
-                <div className="h-6 border border-dashed border-border rounded flex items-center justify-center">
-                  <span className="text-text-muted text-[9px]">0</span>
+                <div className="h-8 border border-dashed border-border rounded flex items-center justify-center">
+                  <span className="text-text-muted text-[10px]">0</span>
                 </div>
               )}
             </div>
 
             {votesRevealed && (
-              <p className={`mt-1 text-[11px] font-bold ${isWinner ? "text-brand-light" : "text-text-muted"}`}>
+              <p className={`mt-1.5 text-xs font-bold ${isWinner ? "text-brand-light" : "text-text-muted"}`}>
                 {count > 0 ? `${count} ${count === 1 ? "voto" : "votos"}` : ""}
               </p>
             )}

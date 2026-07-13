@@ -10,39 +10,39 @@ interface Props {
 
 export default function CardDisplay({ card, roundNumber, cardsToWin }: Props) {
   return (
-    <div className="w-full max-w-lg mx-auto">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-text-secondary text-[11px] font-medium">
+    <div className="w-full max-w-xl mx-auto">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-text-secondary text-xs font-medium">
           Rodada {roundNumber}
         </span>
-        <span className="text-text-muted text-[11px]">
+        <span className="text-text-muted text-xs">
           {cardsToWin} cartas para vencer
         </span>
       </div>
 
-      <div className="relative" style={{ perspective: "800px", minHeight: "80px" }}>
+      <div className="relative" style={{ perspective: "800px", minHeight: "100px" }}>
         <div
-          className="absolute inset-0 rounded-xl animate-card-back-out"
+          className="absolute inset-0 rounded-2xl animate-card-back-out"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="w-full h-full rounded-xl bg-surface-card border border-border flex items-center justify-center">
-            <div className="grid grid-cols-3 gap-2 opacity-20">
+          <div className="w-full h-full rounded-2xl bg-surface-card border border-border flex items-center justify-center">
+            <div className="grid grid-cols-3 gap-3 opacity-20">
               {Array.from({ length: 9 }).map((_, i) => (
-                <div key={i} className="w-4 h-5 border border-brand/30 rounded-sm rotate-45" />
+                <div key={i} className="w-5 h-6 border border-brand/30 rounded-sm rotate-45" />
               ))}
             </div>
           </div>
         </div>
 
         <div
-          className="rounded-xl bg-surface-raised border border-border border-l-4 border-l-brand animate-card-front-in"
+          className="rounded-2xl bg-surface-raised border border-border border-l-4 border-l-brand animate-card-front-in"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="p-5">
-            <div className="flex items-center gap-2 mb-3">
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-4">
               <svg
-                width="16"
-                height="16"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 className="text-brand shrink-0"
@@ -53,10 +53,10 @@ export default function CardDisplay({ card, roundNumber, cardsToWin }: Props) {
                 />
               </svg>
               <div className="h-px flex-1 bg-gradient-to-r from-brand/40 to-transparent" />
-              <span className="text-text-muted text-[10px] shrink-0">#{card.id}</span>
+              <span className="text-text-muted text-xs shrink-0">#{card.id}</span>
             </div>
 
-            <p className="text-base text-text-primary font-medium leading-relaxed text-balance">
+            <p className="text-lg text-text-primary font-medium leading-relaxed text-balance">
               &ldquo;{card.text}&rdquo;
             </p>
           </div>

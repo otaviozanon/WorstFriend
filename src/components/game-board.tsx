@@ -81,7 +81,7 @@ export default function GameBoard() {
 
   return (
     <main className="min-h-dvh bg-surface p-4">
-      <div className="max-w-3xl mx-auto space-y-3 pt-2 pb-20">
+      <div className="max-w-4xl mx-auto space-y-4 pt-3 pb-20">
         {currentRound && (
           <>
             <CardDisplay

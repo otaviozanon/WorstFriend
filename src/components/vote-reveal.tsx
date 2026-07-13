@@ -52,24 +52,24 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
   const getName = (id: string) => playerInfo.get(id)?.name ?? "?";
 
   return (
-    <div className="w-full max-w-lg mx-auto space-y-2 animate-fade-in">
-      <p className="text-text-muted text-[10px] text-center">Votos:</p>
-      <div className="flex flex-wrap justify-center gap-1.5">
+    <div className="w-full max-w-xl mx-auto space-y-3 animate-fade-in">
+      <p className="text-text-muted text-xs text-center">Votos:</p>
+      <div className="flex flex-wrap justify-center gap-2">
         {votes.map((v, i) => {
           const visible = i < step;
           return (
             <div
               key={v.playerId}
-              className={`inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-raised border border-border text-xs transition-all duration-300 ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-raised border border-border text-sm transition-all duration-300 ${
                 visible ? "opacity-100 scale-100" : "opacity-0 scale-75"
               }`}
             >
-              <span className="text-text-primary font-medium text-xs">{getName(v.playerId)}</span>
-              <span className="text-text-muted text-[10px]">→</span>
+              <span className="text-text-primary font-medium">{getName(v.playerId)}</span>
+              <span className="text-text-muted">→</span>
               {v.targetId ? (
-                <span className="text-brand-light font-bold text-xs">{getName(v.targetId)}</span>
+                <span className="text-brand-light font-bold">{getName(v.targetId)}</span>
               ) : (
-                <span className="text-text-muted text-[10px] italic">x</span>
+                <span className="text-text-muted italic">x</span>
               )}
             </div>
           );
@@ -79,16 +79,16 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
       {step >= votes.length && (
         <div className="animate-drum-roll">
           {winner ? (
-            <div className="text-center p-3 rounded-xl border border-brand/30 bg-brand/5">
-              <Award className="w-5 h-5 text-brand-light mx-auto mb-0.5" />
-              <p className="text-sm font-extrabold text-brand-light">GANHOU A CARTA!</p>
-              <p className="text-xs font-bold text-text-primary mt-0.5">{winner.name}</p>
-              <p className="text-[10px] text-text-muted">{voteCounts.get(winner.id)} votos</p>
+            <div className="text-center p-4 rounded-xl border border-brand/30 bg-brand/5">
+              <Award className="w-6 h-6 text-brand-light mx-auto mb-1" />
+              <p className="text-base font-extrabold text-brand-light">GANHOU A CARTA!</p>
+              <p className="text-sm font-bold text-text-primary mt-1">{winner.name}</p>
+              <p className="text-xs text-text-muted">{voteCounts.get(winner.id)} votos</p>
             </div>
           ) : (
-            <div className="text-center p-3 rounded-xl border border-border bg-surface-raised">
-              <Meh className="w-4 h-4 text-text-muted mx-auto mb-0.5" />
-              <p className="text-xs font-bold text-text-muted">Empate!</p>
+            <div className="text-center p-4 rounded-xl border border-border bg-surface-raised">
+              <Meh className="w-5 h-5 text-text-muted mx-auto mb-1" />
+              <p className="text-sm font-bold text-text-muted">Empate!</p>
             </div>
           )}
         </div>
