@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist",
+    "noEmit": false
+  },
+  "include": ["server.mts", "src/server/**/*.ts", "src/game-engine/**/*.ts", "src/cards/**/*.ts"]
+}
