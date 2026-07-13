@@ -95,11 +95,9 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
                   ? "border-brand bg-brand/10 text-brand-light"
                   : isLocalSelection
                     ? "border-brand/60 bg-brand/5 text-brand-light animate-pulse"
-                    : alreadyVoted
-                      ? "border-accent-success/30 bg-accent-success/5 text-accent-success cursor-default"
-                      : hasVoted
-                        ? "border-border bg-surface-raised text-text-muted cursor-default"
-                        : "border-border bg-surface-raised hover:border-brand/40 hover:bg-surface-card text-text-primary"
+                    : hasVoted
+                      ? "border-border bg-surface-raised text-text-muted cursor-default"
+                      : "border-border bg-surface-raised hover:border-brand/40 hover:bg-surface-card text-text-primary"
               }`}
             >
               {p.name}
