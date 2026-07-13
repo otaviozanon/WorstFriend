@@ -38,19 +38,6 @@ export default function GameResult() {
       <div className="w-full max-w-md space-y-10 animate-bounce-in">
         <div className="text-center space-y-5">
           <div className="relative mx-auto w-32 h-32">
-            {CONFETTI_DOTS.map((d, i) => (
-              <div
-                key={i}
-                className={`absolute w-3 h-3 rounded-full ${d.color} animate-confetti-bob`}
-                style={{
-                  top: d.top !== undefined ? `${d.top}px` : undefined,
-                  left: d.left !== undefined ? `${d.left}px` : undefined,
-                  right: d.right !== undefined ? `${d.right}px` : undefined,
-                  bottom: d.bottom !== undefined ? `${d.bottom}px` : undefined,
-                  animationDelay: `${d.delay}s`,
-                }}
-              />
-            ))}
             <div
               className={`absolute inset-0 w-32 h-32 rounded-full border-2 flex items-center justify-center animate-crown-entrance ${
                 gameResult.isTie
@@ -63,6 +50,20 @@ export default function GameResult() {
                 className={gameResult.isTie ? "text-accent-warning" : "text-brand-light"}
               />
             </div>
+            {CONFETTI_DOTS.map((d, i) => (
+              <div
+                key={i}
+                className={`absolute w-3 h-3 rounded-full ${d.color} animate-confetti-bob`}
+                style={{
+                  top: d.top !== undefined ? `${d.top}px` : undefined,
+                  left: d.left !== undefined ? `${d.left}px` : undefined,
+                  right: d.right !== undefined ? `${d.right}px` : undefined,
+                  bottom: d.bottom !== undefined ? `${d.bottom}px` : undefined,
+                  animationDelay: `${d.delay}s`,
+                  zIndex: 10,
+                }}
+              />
+            ))}
           </div>
 
           {gameResult.isTie ? (
@@ -71,17 +72,12 @@ export default function GameResult() {
                 style={{ textShadow: "0 0 24px rgba(234,179,8,0.4), 0 0 48px rgba(234,179,8,0.15)" }}>
                 Empate!
               </h2>
-              <div className="relative inline-block -rotate-2">
+              <div className="relative inline-block -rotate-3">
                 <div className="bg-surface-card border border-accent-warning/20 rounded-xl px-5 py-2.5">
                   <p className="text-text-primary font-bold text-lg">
                     {tiePlayers.map((p) => p.name).join(" e ")}
                   </p>
                 </div>
-              </div>
-              <div className="inline-flex items-center gap-2 bg-surface-card border border-border rounded-full px-4 py-2">
-                <span className="text-text-secondary font-medium text-base">
-                  {tiePlayers[0].cardsWon} cartas cada
-                </span>
               </div>
             </>
           ) : (
@@ -90,7 +86,7 @@ export default function GameResult() {
                 style={{ textShadow: "0 0 24px rgba(245,158,11,0.45), 0 0 48px rgba(245,158,11,0.2)" }}>
                 {gameResult.winner.name}
               </h2>
-              <div className="relative inline-block -rotate-2">
+              <div className="relative inline-block -rotate-3">
                 <div className="relative bg-accent-danger/10 border border-accent-danger/30 rounded-xl px-5 py-2.5">
                   <span className="absolute -top-1 -right-1">
                     <PartyPopper size={18} className="text-accent-warning" />
@@ -99,11 +95,6 @@ export default function GameResult() {
                     é o(a) Amigo de M*!
                   </p>
                 </div>
-              </div>
-              <div className="inline-flex items-center gap-2 bg-surface-card border border-border rounded-full px-4 py-2">
-                <span className="text-text-secondary font-medium text-base">
-                  {gameResult.winner.cardsWon} cartas
-                </span>
               </div>
             </>
           )}
