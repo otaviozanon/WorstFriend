@@ -16,12 +16,12 @@ const DISCONNECT_TIMEOUT = 60000;
 export function setupSocket(io: SocketIOServer): void {
   io.on("connection", (socket: Socket) => {
 
-    socket.on("room:create", ({ playerName }: { playerName: string }) => {
+    socket.on("room:create", ({ playerName, cardsToWin }: { playerName: string; cardsToWin?: number }) => {
       if (!playerName?.trim()) {
         socket.emit("error", { message: "Nome nao pode ser vazio" });
         return;
       }
-      const room = createRoom(playerName.trim());
+      const room = createRoom(playerName.trim(), cardsToWin && [4, 5, 7].includes(cardsToWin) ? cardsToWin : 5);
       setRoom(room.code, room);
       const player = room.players[0];
       mapSocketToPlayer(socket.id, room.code, player.id);

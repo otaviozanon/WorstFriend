@@ -90,7 +90,7 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
               key={p.id}
               onClick={() => handleVote(p.id)}
               disabled={hasVoted}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 active:scale-95 ${
+              className={`inline-flex items-center px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 active:scale-95 ${
                 isMyVote
                   ? "border-brand bg-brand/10 text-brand-light"
                   : isLocalSelection
@@ -103,9 +103,6 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
               }`}
             >
               {p.name}
-              {isMyVote && <UserCheck size={14} />}
-              {isLocalSelection && <ArrowRight size={14} className="animate-pulse" />}
-              {alreadyVoted && !isMyVote && !isLocalSelection && <Check size={14} />}
             </button>
           );
         })}

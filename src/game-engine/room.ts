@@ -14,7 +14,7 @@ function generateRoomCode(): string {
   return code;
 }
 
-export function createRoom(playerName: string): Room {
+export function createRoom(playerName: string, cardsToWin: number = 5): Room {
   const playerId = generateId();
   const hostPlayer: Player = {
     id: playerId,
@@ -28,7 +28,7 @@ export function createRoom(playerName: string): Room {
     host: playerId,
     players: [hostPlayer],
     status: "waiting",
-    cardsToWin: 5,
+    cardsToWin,
     deck: shuffleDeck(),
     currentCardIndex: 0,
     rounds: [],
