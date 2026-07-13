@@ -5,7 +5,7 @@ import { cards } from "@/cards/data";
 describe("shuffleDeck", () => {
   it("returns an array with all 84 cards", () => {
     const deck = shuffleDeck();
-    expect(deck).toHaveLength(134);
+    expect(deck).toHaveLength(150);
   });
 
   it("contains all card ids", () => {
