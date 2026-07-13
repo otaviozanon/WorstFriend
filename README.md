@@ -18,7 +18,7 @@
 
 O sistema revela uma carta com uma pergunta constrangedora. Todos tem **30 segundos** para votar em quem melhor se encaixa na descricao. Nao pode votar em si mesmo, e os votos sao secretos ate o fim do tempo.
 
-O jogador mais votado **ganha a carta**. O primeiro a acumular o numero de cartas definido (4, 5 ou 7) e coroado o <strong>Amigo de Merda</strong>.
+O jogador mais votado **ganha a carta**. O primeiro a acumular o numero de cartas definido (4, 5 ou 7) e coroado o <strong>Amigo de M*</strong>.
 
 <p align="center">
   <em>"Quem tem mais cara de quem peida silenciosamente?"<br />"Quem seria o primeiro a morrer em um apocalipse zumbi?"<br />"Quem e o pior motorista do grupo?"</em>

@@ -29,7 +29,7 @@ export default function RulesModal() {
             <div className="space-y-4 text-sm text-text-secondary">
               <div>
                 <h3 className="font-bold text-brand-light mb-1">Objetivo</h3>
-                <p>Seja o primeiro a acumular o numero de cartas definido (4, 5 ou 7) para ser coroado o <strong>Amigo de Merda</strong>.</p>
+                <p>Seja o primeiro a acumular o numero de cartas definido (4, 5 ou 7) para ser coroado o <strong>Amigo de M*</strong>.</p>
               </div>
 
               <div>
