@@ -133,15 +133,17 @@ export function setupSocket(io: SocketIOServer): void {
       io.to(room.code).emit("room:state", updated);
 
       if (votes.length >= connectedPlayers && connectedPlayers >= 3) {
-          const resetRoom: Room = {
+        const nextIndex = room.currentCardIndex;
+        const freshDeck = nextIndex >= room.deck.length ? shuffleDeck() : room.deck;
+        const resetRoom: Room = {
           ...room,
           status: "playing",
           cardsToWin: room.cardsToWin,
-          currentCardIndex: 0,
+          currentCardIndex: nextIndex >= room.deck.length ? 0 : nextIndex,
           rounds: [],
           winnerId: null,
           playAgainVotes: [],
-          deck: shuffleDeck(),
+          deck: freshDeck,
           players: room.players.map((p) => ({
             ...p,
             cardsWon: 0,
