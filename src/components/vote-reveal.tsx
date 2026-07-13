@@ -25,7 +25,7 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
 
   useEffect(() => {
     if (step < votes.length) {
-      const timer = setTimeout(() => setStep((s) => s + 1), 400);
+      const timer = setTimeout(() => setStep((s) => s + 1), 250);
       return () => clearTimeout(timer);
     }
   }, [step, votes.length]);
@@ -52,40 +52,34 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
   const getColor = (id: string) => playerInfo.get(id)?.color ?? AVATAR_COLORS[0];
 
   return (
-    <div className="w-full max-w-lg mx-auto space-y-4 animate-fade-in">
-      <div className="space-y-2">
+    <div className="w-full max-w-lg mx-auto space-y-2 animate-fade-in">
+      <div className="space-y-1">
         {votes.map((v, i) => {
           const visible = i < step;
           return (
             <div
               key={v.playerId}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-raised border border-border overflow-hidden"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-raised border border-border overflow-hidden"
             >
               <div
-                className={`flex items-center gap-3 transition-all duration-300 ${
+                className={`flex items-center gap-2 transition-all duration-300 ${
                   visible
                     ? "opacity-100 translate-x-0 animate-slide-left-bounce"
                     : "opacity-0 -translate-x-8"
                 }`}
                 style={{ animationDelay: visible ? `${i * 0}ms` : undefined }}
               >
-                <span
-                  className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${getColor(v.playerId)}`}
-                >
+                <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold ${getColor(v.playerId)}`}>
                   {getInitial(v.playerId)}
                 </span>
-                <span className="text-text-primary font-medium">
-                  {getName(v.playerId)}
-                </span>
-                <ArrowRight className="w-4 h-4 text-text-muted shrink-0" />
+                <span className="text-text-primary text-xs font-medium">{getName(v.playerId)}</span>
+                <ArrowRight className="w-3 h-3 text-text-muted shrink-0" />
                 {v.targetId ? (
-                  <span
-                    className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${getColor(v.targetId)}`}
-                  >
+                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold ${getColor(v.targetId)}`}>
                     {getInitial(v.targetId)}
                   </span>
                 ) : null}
-                <span className={v.targetId ? "text-brand-light font-bold" : "text-text-muted italic text-sm"}>
+                <span className={v.targetId ? "text-brand-light text-xs font-bold" : "text-text-muted italic text-xs"}>
                   {v.targetId ? getName(v.targetId) : "nao votou"}
                 </span>
               </div>
@@ -97,35 +91,16 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
       {step >= votes.length && (
         <div className="animate-drum-roll">
           {winner ? (
-            <div
-              className="text-center p-6 rounded-2xl border-2 border-brand/40 relative overflow-hidden"
-              style={{
-                background: "linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(217,119,6,0.08) 50%, rgba(245,158,11,0.12) 100%)",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-brand/5 to-transparent" />
-              <div className="relative z-10 space-y-3">
-                <Award className="w-10 h-10 text-brand-light mx-auto" />
-                <p className="text-2xl font-extrabold text-brand-light tracking-tight">
-                  GANHOU A CARTA!
-                </p>
-                <p className="text-lg font-bold text-text-primary">
-                  {winner.name}
-                </p>
-                <p className="text-sm text-text-muted">
-                  {voteCounts.get(winner.id)} votos
-                </p>
-              </div>
+            <div className="text-center p-4 rounded-xl border border-brand/30 bg-brand/5">
+              <Award className="w-6 h-6 text-brand-light mx-auto mb-1" />
+              <p className="text-lg font-extrabold text-brand-light">GANHOU A CARTA!</p>
+              <p className="text-sm font-bold text-text-primary mt-1">{winner.name}</p>
+              <p className="text-xs text-text-muted">{voteCounts.get(winner.id)} votos</p>
             </div>
           ) : (
-            <div className="text-center p-6 rounded-2xl border-2 border-border bg-surface-raised">
-              <Meh className="w-8 h-8 text-text-muted mx-auto mb-3" />
-              <p className="text-lg font-bold text-text-muted">
-                Empate! Ninguem ganhou a carta.
-              </p>
-              <p className="text-sm text-text-muted mt-1">
-                Os votos foram divididos igualmente
-              </p>
+            <div className="text-center p-4 rounded-xl border border-border bg-surface-raised">
+              <Meh className="w-5 h-5 text-text-muted mx-auto mb-1" />
+              <p className="text-sm font-bold text-text-muted">Empate! Ninguem ganhou.</p>
             </div>
           )}
         </div>

@@ -34,7 +34,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
             key={p.id}
             className={`relative rounded-lg p-2 text-center border transition-all duration-300 animate-slide-up ${
               isWinner
-                ? "border-brand bg-brand/10 shadow-[0_0_6px_rgba(245,158,11,0.15)]"
+                ? "border-brand/50 bg-brand/5"
                 : hasVoted
                   ? "border-accent-success/30 bg-accent-success/5"
                   : "border-border bg-surface-raised"
@@ -63,7 +63,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
               </span>
             )}
 
-            <div className={`mt-1 mx-auto ${isWinner ? "animate-glow-pulse" : ""}`}>
+            <div className="mt-1 mx-auto">
               {p.cardsWon > 0 ? (
                 <div className="flex items-center justify-center">
                   {Array.from({ length: Math.min(p.cardsWon, 7) }).map((_, ci) => {
@@ -73,11 +73,9 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
                     return (
                       <div
                         key={ci}
-                        className={`w-4 h-5 rounded-[3px] bg-surface-card transition-all duration-300 ${
-                          isWinner
-                            ? "border border-brand shadow-[0_0_4px_rgba(245,158,11,0.2)]"
-                            : "border border-brand/40"
-                        } ${isLastCard && wonThisRound ? "animate-bounce-in" : "animate-card-in"}`}
+                        className={`w-4 h-5 rounded-[3px] bg-surface-card transition-all duration-300 border border-brand/40 ${
+                          isLastCard && wonThisRound ? "animate-bounce-in" : "animate-card-in"}
+                        }`}
                         style={{
                           marginLeft: ci > 0 ? "-8px" : 0,
                           rotate: `${angle}deg`,
