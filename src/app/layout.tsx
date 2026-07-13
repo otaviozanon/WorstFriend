@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "WorstFriend - Amigos de Merda",
+  title: "WorstFriend - Amigos de M*",
   description: "O jogo que vai destruir suas amizades",
   icons: { icon: "/crown.svg", shortcut: "/crown.svg", apple: "/crown.svg" },
 };

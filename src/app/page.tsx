@@ -44,7 +44,7 @@ export default function HomePage() {
           </div>
           <div>
             <h1 className="text-4xl font-black text-text-primary tracking-tight">
-              Amigos de Merda
+              Amigos de M*
             </h1>
             <p className="text-text-secondary text-lg mt-1 font-medium">WorstFriend</p>
           </div>
