@@ -16,105 +16,22 @@
 
 ## Como Jogar
 
-O sistema revela uma carta com uma pergunta constrangedora. Todos têm **30 segundos** para votar em quem melhor se encaixa na descrição. Não pode votar em si mesmo, e os votos são secretos até o fim do tempo.
+O sistema revela uma carta com uma pergunta constrangedora. Todos têm **30 segundos** para votar em quem melhor se encaixa na descrição. Não pode votar em si mesmo. Os votos são secretos até o fim do tempo.
 
-O jogador mais votado **ganha a carta**. O primeiro a acumular o número de cartas definido (4, 5 ou 7) é coroado o <strong>Amigo de M*</strong>.
+O jogador mais votado **ganha a carta**. O primeiro a acumular o número de cartas definido (4, 5 ou 7) é coroado o <strong>Amigo de M*</strong>. Em caso de empate, ninguém ganha a carta.
 
 <p align="center">
-  <em>"Quem tem mais cara de quem peida silenciosamente?"<br />"Quem seria o primeiro a morrer em um apocalipse zumbi?"<br />"Quem e o pior motorista do grupo?"</em>
+  <em>"Quem pede dinheiro emprestado sabendo que nunca vai devolver?"<br />"Quem seria o primeiro a morrer em um apocalipse zumbi?"<br />"Quem já stalkeou o ex nas redes sociais usando conta fake?"</em>
 </p>
-
----
-
-## Tecnologia
-
-- **Frontend:** React 19 + Next.js 15
-- **Estilizacao:** Tailwind CSS 4
-- **Estado:** Zustand
-- **Tempo real:** Socket.IO
-- **Icones:** Lucide React
-- **Testes:** Vitest + Testing Library
-- **Runtime:** Node.js (servidor WebSocket customizado)
-
----
-
-## Como Rodar
-
-```bash
-# Instalar dependencias
-npm install
-
-# Desenvolvimento (Next.js + WebSocket server)
-npm run dev
-
-# Build de produção
-npm run build
-
-# Iniciar em produção
-npm start
-```
-
----
-
-## Testes
-
-```bash
-# Rodar todos os testes
-npm test
-
-# Modo watch
-npm run test:watch
-```
-
----
-
-## Estrutura do Projeto
-
-```
-src/
-  app/              # Rotas Next.js (App Router)
-    page.tsx        # Landing page (criar/entrar sala)
-    sala/[id]/      # Sala de espera
-    jogo/[id]/      # Jogo em andamento
-  components/       # Componentes React
-    rules-modal.tsx # Modal de regras
-    card-display.tsx
-    game-board.tsx
-    player-grid.tsx
-    vote-panel.tsx
-    vote-reveal.tsx
-    game-result.tsx
-  game-engine/      # Logica do jogo (server-side)
-    game.ts         # Maquina de estados do jogo
-    room.ts         # Gerenciamento de salas
-    deck.ts         # Baralho de cartas
-    round.ts        # Controle de rodadas
-    scoring.ts      # Pontuacao
-  cards/
-    data.ts         # Dados das cartas/perguntas
-  server/
-    socket.ts       # Servidor WebSocket (Socket.IO)
-    rooms.ts        # Gerenciamento de salas no servidor
-  lib/
-    store.ts        # Store Zustand (estado do cliente)
-    socket.ts       # Cliente Socket.IO
-tests/              # Testes do game-engine
-  game-engine/
-    deck.test.ts
-    game.test.ts
-    room.test.ts
-    round.test.ts
-    scoring.test.ts
-```
 
 ---
 
 ## Como Jogar Online
 
-1. Crie uma sala e compartilhe o **codigo de 6 digitos** ou o link
-2. Seus amigos entram na sala (3+ jogadores, sem limite)
-3. O host escolhe **4, 5 ou 7 cartas** para vencer
-4. **30 segundos** por rodada para votar. O mais votado ganha a carta!
+1. Crie uma sala e compartilhe o **código de 6 dígitos** ou o link
+2. Seus amigos entram na sala (mínimo 3 jogadores, sem limite máximo)
+3. O host escolhe **4, 5 ou 7 cartas** para vencer e inicia a partida
+4. **30 segundos** por rodada. O host controla o avanço entre rodadas
 
 ---
 
