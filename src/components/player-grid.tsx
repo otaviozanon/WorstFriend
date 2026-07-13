@@ -18,7 +18,6 @@ const CARD_ANGLES = [-3, 0, 3];
 
 export default function PlayerGrid({ players, myPlayerId, winnerId, votesRevealed, voteCounts, myVoteTargetId, votedPlayerIds, isVotingPhase }: Props) {
   const cols = players.length <= 6 ? "grid-cols-2 sm:grid-cols-3" : players.length <= 12 ? "grid-cols-3 sm:grid-cols-4" : "grid-cols-4 sm:grid-cols-5";
-  const others = players.filter(p => p.id !== myPlayerId);
   const votedCount = isVotingPhase && votedPlayerIds ? votedPlayerIds.size : 0;
 
   return (
@@ -26,7 +25,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
       {isVotingPhase && (
         <div className="flex items-center justify-center gap-2">
           <div className="flex -space-x-1">
-            {others.slice(0, 6).map((p, i) => {
+            {players.slice(0, 7).map((p, i) => {
               const v = votedPlayerIds?.has(p.id);
               return (
                 <div key={p.id} className={`w-6 h-6 rounded-full border-2 border-surface flex items-center justify-center text-[10px] font-bold transition-all duration-300 ${
@@ -36,11 +35,11 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
                 </div>
               );
             })}
-            {others.length > 6 && (
-              <span className="text-text-muted text-[10px] self-center ml-1">+{others.length - 6}</span>
+            {players.length > 7 && (
+              <span className="text-text-muted text-[10px] self-center ml-1">+{players.length - 7}</span>
             )}
           </div>
-          <span className="text-text-muted text-xs">{votedCount}/{others.length}</span>
+          <span className="text-text-muted text-xs">{votedCount}/{players.length}</span>
         </div>
       )}
 
