@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { connectSocket, getSocket } from "@/lib/socket";
-import { setupSocketListeners, useGameStore } from "@/lib/store";
+import { connectSocket, getSocket, disconnectSocket } from "@/lib/socket";
+import { setupSocketListeners, teardownSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
 import { Crown, Users, LogIn, ArrowRight } from "lucide-react";
 import RulesModal from "@/components/rules-modal";
@@ -15,7 +15,7 @@ export default function HomePage() {
   const [cardsToWin, setCardsToWin] = useState<number>(5);
   const { error, setError } = useGameStore();
 
-  useEffect(() => { setupSocketListeners(); connectSocket(); }, []);
+  useEffect(() => { setupSocketListeners(); connectSocket(); return () => { teardownSocketListeners(); disconnectSocket(); }; }, []);
 
   useEffect(() => {
     const socket = getSocket();

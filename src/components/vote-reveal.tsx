@@ -2,7 +2,7 @@
 
 import { Player, Round } from "@/game-engine/types";
 import { ArrowRight, Award, Meh } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Props {
   round: Round;
@@ -34,12 +34,22 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
     ? players.find((p) => p.id === round.winnerId)
     : null;
 
-  const getName = (id: string) => players.find((p) => p.id === id)?.name ?? "?";
-  const getInitial = (id: string) => getName(id).charAt(0).toUpperCase();
-  const getColor = (id: string) => {
-    const idx = [...players].sort((a, b) => a.id.localeCompare(b.id)).findIndex((p) => p.id === id);
-    return AVATAR_COLORS[Math.abs(idx) % AVATAR_COLORS.length];
-  };
+  const playerInfo = useMemo(() => {
+    const map = new Map<string, { name: string; initial: string; color: string }>();
+    const sorted = [...players].sort((a, b) => a.id.localeCompare(b.id));
+    sorted.forEach((p, idx) => {
+      map.set(p.id, {
+        name: p.name,
+        initial: p.name.charAt(0).toUpperCase(),
+        color: AVATAR_COLORS[Math.abs(idx) % AVATAR_COLORS.length],
+      });
+    });
+    return map;
+  }, [players]);
+
+  const getName = (id: string) => playerInfo.get(id)?.name ?? "?";
+  const getInitial = (id: string) => playerInfo.get(id)?.initial ?? "?";
+  const getColor = (id: string) => playerInfo.get(id)?.color ?? AVATAR_COLORS[0];
 
   return (
     <div className="w-full max-w-lg mx-auto space-y-4 animate-fade-in">

@@ -29,6 +29,7 @@ export const useGameStore = create<GameStore>((set) => ({
 }));
 
 let listenersSetup = false;
+let errorTimer: ReturnType<typeof setTimeout> | null = null;
 
 export function setupSocketListeners(): void {
   if (listenersSetup) return;
@@ -51,14 +52,27 @@ export function setupSocketListeners(): void {
     useGameStore.getState().setGameResult(result);
   });
 
-  let errorTimer: ReturnType<typeof setTimeout>;
   socket.on("error", ({ message }: { message: string }) => {
     useGameStore.getState().setError(message);
-    clearTimeout(errorTimer);
+    if (errorTimer !== null) clearTimeout(errorTimer);
     errorTimer = setTimeout(() => useGameStore.getState().setError(null), 5000);
   });
 
   socket.on("disconnect", () => {
     useGameStore.getState().setError("Conexao perdida. Tentando reconectar...");
   });
+}
+
+export function teardownSocketListeners(): void {
+  const socket = getSocket();
+  socket.off("room:state");
+  socket.off("player:id");
+  socket.off("game:end");
+  socket.off("error");
+  socket.off("disconnect");
+  if (errorTimer !== null) {
+    clearTimeout(errorTimer);
+    errorTimer = null;
+  }
+  listenersSetup = false;
 }

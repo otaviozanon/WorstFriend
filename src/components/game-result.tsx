@@ -6,6 +6,15 @@ import { useGameStore } from "@/lib/store";
 import { Crown, RotateCcw, PartyPopper } from "lucide-react";
 import RulesModal from "./rules-modal";
 
+const CONFETTI_DOTS = [
+  { color: "bg-brand",            top: -4,  left: 28,  delay: 0 },
+  { color: "bg-accent-success",   top: 8,   right: -4,  delay: 0.25 },
+  { color: "bg-accent-warning",   bottom: 20, right: 4, delay: 0.45 },
+  { color: "bg-accent-danger",    bottom: -4, left: 24, delay: 0.65 },
+  { color: "bg-brand-light",      top: 44,  left: -6,  delay: 0.85 },
+  { color: "bg-brand-dark",       top: 28,  right: 22, delay: 1.05 },
+];
+
 export default function GameResult() {
   const { gameResult, room, myPlayerId } = useGameStore();
 
@@ -19,15 +28,6 @@ export default function GameResult() {
   const connectedPlayers = room.players.filter((p) => p.connected).length;
   const voteProgress = room.playAgainVotes.length;
 
-  const confettiDots = [
-    { color: "bg-brand",            top: -4,  left: 28,  delay: 0 },
-    { color: "bg-accent-success",   top: 8,   right: -4,  delay: 0.25 },
-    { color: "bg-accent-warning",   bottom: 20, right: 4, delay: 0.45 },
-    { color: "bg-accent-danger",    bottom: -4, left: 24, delay: 0.65 },
-    { color: "bg-brand-light",      top: 44,  left: -6,  delay: 0.85 },
-    { color: "bg-brand-dark",       top: 28,  right: 22, delay: 1.05 },
-  ];
-
   const tiePlayers = gameResult.players.filter(
     (p) => p.cardsWon === gameResult.players[0].cardsWon
   );
@@ -37,7 +37,7 @@ export default function GameResult() {
       <div className="w-full max-w-md space-y-10 animate-bounce-in">
         <div className="text-center space-y-5">
           <div className="relative mx-auto w-32 h-32">
-            {confettiDots.map((d, i) => (
+            {CONFETTI_DOTS.map((d, i) => (
               <div
                 key={i}
                 className={`absolute w-3 h-3 rounded-full ${d.color} animate-confetti-bob`}

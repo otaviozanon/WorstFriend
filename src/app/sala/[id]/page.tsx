@@ -22,7 +22,6 @@ export default function RoomPage() {
     const socket = getSocket();
     function onGameUpdate(updated: ReturnType<typeof useGameStore.getState>["room"]) {
       if (!updated) return;
-      useGameStore.getState().setRoom(updated);
       if (updated.status !== "waiting") router.push(`/jogo/${params.id}`);
     }
     socket.on("room:state", onGameUpdate);
