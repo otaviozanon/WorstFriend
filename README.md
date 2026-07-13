@@ -4,8 +4,10 @@
 
 <h1 align="center">WorstFriend</h1>
 <p align="center"><strong>Amigos de M*</strong> — Um verdadeiro validador para o amigo mais m*</p>
-<a align="center" href="https://worstfriendgame.onrender.com/">JOGUE AGUI</a>
 
+<p align="center">
+  <a href="https://worstfriendgame.onrender.com"><strong>🎮 JOGUE AQUI</strong></a>
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/jogadores-3%2B-orange" />
