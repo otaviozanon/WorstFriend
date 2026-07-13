@@ -28,8 +28,8 @@ describe("Full Game Flow", () => {
   it("complete game: create, join, vote, win", async () => {
     const { host, p2, p3, roomCode } = await setupGame();
 
-    let p2id: string;
-    let p3id: string;
+    let p2id = "";
+    let p3id = "";
 
     const p2Ready = new Promise<any>((resolve) => {
       p2.on("room:state", resolve);
@@ -65,7 +65,7 @@ describe("Full Game Flow", () => {
         if (state.status === "revealing") resolve(state);
       });
     });
-    host.emit("game:vote", { targetId: p3id }); // p3 gets 2 votes
+    host.emit("game:vote", { targetId: p3id });
 
     const revealed = await revealDone;
     expect(revealed.status).toBe("revealing");
@@ -80,7 +80,7 @@ describe("Full Game Flow", () => {
     const { host, p2, p3, room, roomCode } = await setupGame();
     const p1id = room.players[0].id;
 
-    let p2id: string, p3id: string;
+    let p2id = "", p3id = "";
 
     const p2Ready = new Promise<any>((resolve) => {
       p2.on("room:state", resolve);
@@ -108,7 +108,7 @@ describe("Full Game Flow", () => {
 
     host.emit("game:vote", { targetId: p3id });
     p2.emit("game:vote", { targetId: p1id });
-    p3.emit("game:vote", { targetId: p2id }); // 1 vote each
+    p3.emit("game:vote", { targetId: p2id });
 
     const revealDone = new Promise<any>((resolve) => {
       host.on("room:state", (state: any) => {
