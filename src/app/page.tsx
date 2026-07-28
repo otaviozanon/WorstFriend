@@ -8,6 +8,8 @@ import { Room } from "@/game-engine/types";
 import { Users, LogIn, ArrowRight } from "lucide-react";
 import PoopIcon from "@/components/poop-icon";
 import RulesModal from "@/components/rules-modal";
+import LanguageSwitcher from "@/components/language-switcher";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 
 export default function HomePage() {
   const router = useRouter();
@@ -15,41 +17,66 @@ export default function HomePage() {
   const [roomCode, setRoomCode] = useState("");
   const [cardsToWin, setCardsToWin] = useState<number>(5);
   const { error, setError } = useGameStore();
+  const { t } = useLanguage();
 
-  useEffect(() => { setupSocketListeners(); connectSocket(); }, []);
+  useEffect(() => {
+    setupSocketListeners();
+    connectSocket();
+  }, []);
 
   useEffect(() => {
     const socket = getSocket();
-    function onRoomState(room: Room) { router.push(`/sala/${room.code}`); }
+    function onRoomState(room: Room) {
+      router.push(`/sala/${room.code}`);
+    }
     socket.on("room:state", onRoomState);
-    return () => { socket.off("room:state", onRoomState); };
+    return () => {
+      socket.off("room:state", onRoomState);
+    };
   }, [router]);
 
   const handleCreate = useCallback(() => {
-    if (!name.trim()) { setError("Digite seu nome"); return; }
+    if (!name.trim()) {
+      setError(t.home.errorName);
+      return;
+    }
     getSocket().emit("room:create", { playerName: name.trim(), cardsToWin });
-  }, [name, cardsToWin, setError]);
+  }, [name, cardsToWin, setError, t]);
 
   const handleJoin = useCallback(() => {
-    if (!name.trim()) { setError("Digite seu nome"); return; }
-    if (!roomCode.trim()) { setError("Digite o código da sala"); return; }
-    getSocket().emit("room:join", { roomCode: roomCode.trim().toUpperCase(), playerName: name.trim() });
-  }, [name, roomCode, setError]);
+    if (!name.trim()) {
+      setError(t.home.errorName);
+      return;
+    }
+    if (!roomCode.trim()) {
+      setError(t.home.errorCode);
+      return;
+    }
+    getSocket().emit("room:join", {
+      roomCode: roomCode.trim().toUpperCase(),
+      playerName: name.trim(),
+    });
+  }, [name, roomCode, setError, t]);
 
   return (
     <main className="min-h-dvh flex items-center justify-center p-4 bg-surface">
       <div className="w-full max-w-md space-y-10 animate-fade-in">
         <div className="text-center space-y-4">
           <div className="flex justify-center">
-            <PoopIcon size={72} className="text-brand-light animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]" />
+            <PoopIcon
+              size={72}
+              className="text-brand-light animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+            />
           </div>
           <div>
             <h1 className="text-4xl font-black text-text-primary tracking-tight">
-              Amigos de M*
+              {t.home.title}
             </h1>
-            <p className="text-text-secondary text-lg mt-1 font-medium">WorstFriend</p>
+            <p className="text-text-secondary text-lg mt-1 font-medium">
+              {t.home.subtitle}
+            </p>
           </div>
-          <p className="text-text-muted text-sm">Jogo de votacao • 3+ jogadores</p>
+          <p className="text-text-muted text-sm">{t.home.description}</p>
         </div>
 
         <div className="space-y-4">
@@ -57,31 +84,45 @@ export default function HomePage() {
             className="w-full px-5 py-4 rounded-2xl bg-surface-raised border-2 border-border text-text-primary
                        placeholder:text-text-muted/50 focus:outline-none focus:border-brand/40 focus:bg-surface-card
                        transition-all duration-300 text-lg font-medium touch-target"
-            placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} maxLength={20}
+            placeholder={t.home.namePlaceholder}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={20}
           />
 
           <div className="flex gap-2">
             {[4, 5, 7].map((n) => (
-              <button key={n} onClick={() => setCardsToWin(n)}
+              <button
+                key={n}
+                onClick={() => setCardsToWin(n)}
                 className={`flex-1 flex items-center justify-center gap-1 px-4 py-3 rounded-2xl border-2 text-sm font-bold transition-all duration-300 touch-target ${
-                  cardsToWin === n ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-border bg-surface-raised text-text-muted hover:border-border"
-                }`}>
-                {n} cartas
+                  cardsToWin === n
+                    ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10"
+                    : "border-border bg-surface-raised text-text-muted hover:border-border"
+                }`}
+              >
+                {n} {t.home.cards}
               </button>
             ))}
           </div>
 
-          <button onClick={handleCreate}
+          <button
+            onClick={handleCreate}
             className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl
                        bg-gradient-to-r from-brand to-brand-dark hover:from-brand-light hover:to-brand
                        active:scale-[0.98] text-black font-black text-lg
-                       transition-all duration-200 touch-target shadow-2xl shadow-brand/30">
-            <Users size={22} />Criar Sala<ArrowRight size={18} />
+                       transition-all duration-200 touch-target shadow-2xl shadow-brand/30"
+          >
+            <Users size={22} />
+            {t.home.createRoom}
+            <ArrowRight size={18} />
           </button>
 
           <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-text-primary/5" />
-            <span className="text-text-muted text-xs font-medium">ou entre em uma sala</span>
+            <span className="text-text-muted text-xs font-medium">
+              {t.home.orJoin}
+            </span>
             <div className="flex-1 h-px bg-text-primary/5" />
           </div>
 
@@ -90,11 +131,16 @@ export default function HomePage() {
               className="flex-1 px-5 py-4 rounded-2xl bg-surface-raised border-2 border-border text-text-primary
                          placeholder:text-text-muted/50 text-center text-lg font-mono font-bold tracking-[0.4em] uppercase
                          focus:outline-none focus:border-brand/40 transition-all duration-300 touch-target"
-              placeholder="CODIGO" value={roomCode} onChange={(e) => setRoomCode(e.target.value)} maxLength={6}
+              placeholder={t.home.roomCodeLabel}
+              value={roomCode}
+              onChange={(e) => setRoomCode(e.target.value)}
+              maxLength={6}
             />
-            <button onClick={handleJoin}
+            <button
+              onClick={handleJoin}
               className="px-7 py-4 rounded-2xl bg-surface-raised hover:bg-surface-card border-2 border-border hover:border-brand/30
-                         text-text-primary font-bold text-lg transition-all duration-200 active:scale-[0.98] touch-target">
+                         text-text-primary font-bold text-lg transition-all duration-200 active:scale-[0.98] touch-target"
+            >
               <LogIn size={22} />
             </button>
           </div>
@@ -105,6 +151,7 @@ export default function HomePage() {
             {error}
           </div>
         ) : null}
+        <LanguageSwitcher />
       </div>
       <RulesModal />
     </main>

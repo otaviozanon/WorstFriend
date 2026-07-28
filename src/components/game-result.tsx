@@ -6,18 +6,20 @@ import { useGameStore } from "@/lib/store";
 import { RotateCcw, PartyPopper } from "lucide-react";
 import PoopIcon from "./poop-icon";
 import RulesModal from "./rules-modal";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 
 const CONFETTI_DOTS = [
-  { color: "bg-brand",            top: -4,  left: 28,  delay: 0 },
-  { color: "bg-accent-success",   top: 8,   right: -4,  delay: 0.25 },
-  { color: "bg-accent-warning",   bottom: 20, right: 4, delay: 0.45 },
-  { color: "bg-accent-danger",    bottom: -4, left: 24, delay: 0.65 },
-  { color: "bg-brand-light",      top: 44,  left: -6,  delay: 0.85 },
-  { color: "bg-brand-dark",       top: 28,  right: 22, delay: 1.05 },
+  { color: "bg-brand", top: -4, left: 28, delay: 0 },
+  { color: "bg-accent-success", top: 8, right: -4, delay: 0.25 },
+  { color: "bg-accent-warning", bottom: 20, right: 4, delay: 0.45 },
+  { color: "bg-accent-danger", bottom: -4, left: 24, delay: 0.65 },
+  { color: "bg-brand-light", top: 44, left: -6, delay: 0.85 },
+  { color: "bg-brand-dark", top: 28, right: 22, delay: 1.05 },
 ];
 
 export default function GameResult() {
   const { gameResult, room, myPlayerId } = useGameStore();
+  const { t } = useLanguage();
 
   const handlePlayAgain = useCallback(() => {
     getSocket().emit("game:playAgain", {});
@@ -30,7 +32,7 @@ export default function GameResult() {
   const voteProgress = room.playAgainVotes.length;
 
   const tiePlayers = gameResult.players.filter(
-    (p) => p.cardsWon === gameResult.players[0].cardsWon
+    (p) => p.cardsWon === gameResult.players[0].cardsWon,
   );
 
   return (
@@ -47,7 +49,9 @@ export default function GameResult() {
             >
               <PoopIcon
                 size={64}
-                className={gameResult.isTie ? "text-accent-warning" : "text-brand-light"}
+                className={
+                  gameResult.isTie ? "text-accent-warning" : "text-brand-light"
+                }
               />
             </div>
             {CONFETTI_DOTS.map((d, i) => (
@@ -68,9 +72,14 @@ export default function GameResult() {
 
           {gameResult.isTie ? (
             <>
-              <h2 className="text-4xl font-black text-accent-warning"
-                style={{ textShadow: "0 0 24px rgba(234,179,8,0.4), 0 0 48px rgba(234,179,8,0.15)" }}>
-                Empate!
+              <h2
+                className="text-4xl font-black text-accent-warning"
+                style={{
+                  textShadow:
+                    "0 0 24px rgba(234,179,8,0.4), 0 0 48px rgba(234,179,8,0.15)",
+                }}
+              >
+                {t.result.tie}
               </h2>
               <div className="relative inline-block -rotate-3">
                 <div className="bg-surface-card border border-accent-warning/20 rounded-xl px-5 py-2.5">
@@ -82,8 +91,13 @@ export default function GameResult() {
             </>
           ) : (
             <>
-              <h2 className="text-4xl font-black text-brand-light"
-                style={{ textShadow: "0 0 24px rgba(245,158,11,0.45), 0 0 48px rgba(245,158,11,0.2)" }}>
+              <h2
+                className="text-4xl font-black text-brand-light"
+                style={{
+                  textShadow:
+                    "0 0 24px rgba(245,158,11,0.45), 0 0 48px rgba(245,158,11,0.2)",
+                }}
+              >
                 {gameResult.winner.name}
               </h2>
               <div className="relative inline-block -rotate-3">
@@ -92,7 +106,7 @@ export default function GameResult() {
                     <PartyPopper size={22} className="text-accent-warning" />
                   </span>
                   <p className="text-accent-danger font-black text-xl">
-                    é o(a) Amigo de M*!
+                    {t.result.winnerTitle}
                   </p>
                 </div>
               </div>
@@ -101,7 +115,9 @@ export default function GameResult() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-sm text-text-muted font-medium px-1">Ranking</h3>
+          <h3 className="text-sm text-text-muted font-medium px-1">
+            {t.result.ranking}
+          </h3>
           {gameResult.players.map((p, i) => {
             const isWinner = p.id === gameResult.winner.id && !gameResult.isTie;
             const isFirst = i === 0;
@@ -115,7 +131,10 @@ export default function GameResult() {
                       ? "border-accent-warning/20 bg-surface-raised"
                       : "border-border bg-surface-raised"
                 }`}
-                style={{ animationDelay: `${i * 80}ms`, animationFillMode: "both" }}
+                style={{
+                  animationDelay: `${i * 80}ms`,
+                  animationFillMode: "both",
+                }}
               >
                 <span
                   className={`font-mono text-sm w-6 font-bold ${
@@ -128,18 +147,20 @@ export default function GameResult() {
                   {p.name}
                 </span>
                 <div className="flex items-end gap-px">
-                  {Array.from({ length: Math.min(p.cardsWon, 10) }).map((_, j) => (
-                    <div
-                      key={j}
-                      className={`w-2.5 h-5 rounded-sm border ${
-                        isWinner
-                          ? "bg-brand/80 border-brand/40"
-                          : isFirst
-                            ? "bg-accent-warning/50 border-accent-warning/30"
-                            : "bg-surface-card border-border"
-                      }`}
-                    />
-                  ))}
+                  {Array.from({ length: Math.min(p.cardsWon, 10) }).map(
+                    (_, j) => (
+                      <div
+                        key={j}
+                        className={`w-2.5 h-5 rounded-sm border ${
+                          isWinner
+                            ? "bg-brand/80 border-brand/40"
+                            : isFirst
+                              ? "bg-accent-warning/50 border-accent-warning/30"
+                              : "bg-surface-card border-border"
+                        }`}
+                      />
+                    ),
+                  )}
                   {p.cardsWon > 10 && (
                     <span className="text-xs text-text-muted font-bold ml-1 leading-5">
                       +{p.cardsWon - 10}
@@ -151,7 +172,7 @@ export default function GameResult() {
                     isWinner ? "text-brand-light" : "text-text-secondary"
                   }`}
                 >
-                  {p.cardsWon} cartas
+                  {p.cardsWon} {t.result.cards}
                 </span>
               </div>
             );
@@ -168,7 +189,7 @@ export default function GameResult() {
           }`}
         >
           <RotateCcw size={22} />
-          {hasVoted ? "Aguardando outros jogadores..." : "Jogar Novamente"}
+          {hasVoted ? t.result.waiting : t.result.playAgain}
         </button>
 
         {connectedPlayers > 0 && (
