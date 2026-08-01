@@ -11,4 +11,4 @@ services:
       - key: PORT
         value: 3000
       - key: NEXT_PUBLIC_WS_URL
-        value: https://worstfriend.onrender.com
+        value: https://worstfriendgame.onrender.com
