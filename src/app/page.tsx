@@ -4,18 +4,24 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
-import { Room } from "@/game-engine/types";
+import { Room, CardCategory } from "@/game-engine/types";
 import { Users, LogIn, ArrowRight } from "lucide-react";
 import PoopIcon from "@/components/poop-icon";
 import RulesModal from "@/components/rules-modal";
 import LanguageSwitcher from "@/components/language-switcher";
 import { useLanguage } from "@/lib/i18n/useLanguage";
 
+const ALL_CATEGORIES: { key: CardCategory; icon: string; label: string }[] = [
+  { key: "ácida_extrema", icon: "💀", label: "extrema" },
+  { key: "+18", icon: "🔞", label: "adult" },
+];
+
 export default function HomePage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [roomCode, setRoomCode] = useState("");
   const [cardsToWin, setCardsToWin] = useState<number>(5);
+  const [categories, setCategories] = useState<CardCategory[]>(["ácida_extrema"]);
   const { error, setError } = useGameStore();
   const { t } = useLanguage();
 
@@ -35,13 +41,27 @@ export default function HomePage() {
     };
   }, [router]);
 
+  const toggleCategory = useCallback((cat: CardCategory) => {
+    setCategories((prev) => {
+      if (prev.includes(cat)) {
+        if (prev.length === 1) return prev;
+        return prev.filter((c) => c !== cat);
+      }
+      return [...prev, cat];
+    });
+  }, []);
+
   const handleCreate = useCallback(() => {
     if (!name.trim()) {
       setError(t.home.errorName);
       return;
     }
-    getSocket().emit("room:create", { playerName: name.trim(), cardsToWin });
-  }, [name, cardsToWin, setError, t]);
+    if (categories.length === 0) {
+      setError(t.home.errorName);
+      return;
+    }
+    getSocket().emit("room:create", { playerName: name.trim(), cardsToWin, categories });
+  }, [name, cardsToWin, categories, setError, t]);
 
   const handleJoin = useCallback(() => {
     if (!name.trim()) {
@@ -104,6 +124,36 @@ export default function HomePage() {
                 {n} {t.home.cards}
               </button>
             ))}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-text-muted text-xs font-medium uppercase tracking-wider">
+              {t.home.categories.label}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {ALL_CATEGORIES.map(({ key, icon, label }) => {
+                const active = categories.includes(key);
+                const catLabel =
+                  label === "extrema" ? t.home.categories.extrema :
+                  t.home.categories.adult;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => toggleCategory(key)}
+                    className={`flex items-center gap-1.5 px-4 py-2.5 rounded-2xl border-2 text-sm font-bold transition-all duration-300 touch-target ${
+                      active
+                        ? key === "+18"
+                          ? "border-pink-500/50 bg-pink-500/10 text-pink-400 shadow-lg shadow-pink-500/10"
+                          : "border-red-500/50 bg-red-500/10 text-red-400 shadow-lg shadow-red-500/10"
+                        : "border-border bg-surface-raised text-text-muted hover:border-border"
+                    }`}
+                  >
+                    <span>{icon}</span>
+                    {catLabel}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <button

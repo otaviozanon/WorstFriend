@@ -3,6 +3,7 @@
 import { Player, Round } from "@/game-engine/types";
 import { Award, Meh } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 
 interface Props {
   round: Round;
@@ -22,6 +23,7 @@ const AVATAR_COLORS = [
 ];
 
 export default function VoteReveal({ round, players, voteCounts }: Props) {
+  const { t } = useLanguage();
   const [step, setStep] = useState(0);
   const votes = round.votes;
 
@@ -36,6 +38,11 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
     ? players.find((p) => p.id === round.winnerId)
     : null;
 
+  const playerIdsKey = useMemo(
+    () => players.map((p) => p.id).join(","),
+    [players],
+  );
+
   const playerInfo = useMemo(() => {
     const map = new Map<string, { name: string; initial: string; color: string }>();
     const sorted = [...players].sort((a, b) => a.id.localeCompare(b.id));
@@ -47,7 +54,7 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
       });
     });
     return map;
-  }, [players]);
+  }, [playerIdsKey]);
 
   const getInitial = (id: string) => playerInfo.get(id)?.initial ?? "?";
   const getColor = (id: string) => playerInfo.get(id)?.color ?? AVATAR_COLORS[0];
@@ -55,7 +62,7 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-3 animate-fade-in">
-      <p className="text-text-muted text-xs text-center">Votos:</p>
+      <p className="text-text-muted text-xs text-center">{t.game.votesLabel}</p>
       <div className="flex flex-wrap justify-center gap-2">
         {votes.map((v, i) => {
           const visible = i < step;
@@ -83,14 +90,15 @@ export default function VoteReveal({ round, players, voteCounts }: Props) {
           {winner ? (
             <div className="text-center p-4 rounded-xl border border-brand/30 bg-brand/5">
               <Award className="w-6 h-6 text-brand-light mx-auto mb-1" />
-              <p className="text-base font-extrabold text-brand-light">GANHOU A CARTA!</p>
+              <p className="text-base font-extrabold text-brand-light">{t.game.wonCard}</p>
               <p className="text-sm font-bold text-text-primary mt-1">{winner.name}</p>
-              <p className="text-xs text-text-muted">{voteCounts.get(winner.id)} votos</p>
+              <p className="text-xs text-text-muted">{voteCounts.get(winner.id)} {t.game.votes}</p>
             </div>
           ) : (
             <div className="text-center p-4 rounded-xl border border-border bg-surface-raised">
               <Meh className="w-5 h-5 text-text-muted mx-auto mb-1" />
-              <p className="text-sm font-bold text-text-muted">Empate!</p>
+              <p className="text-sm font-bold text-text-muted">{t.game.tieResult}</p>
+              <p className="text-xs text-text-muted mt-1">{t.game.nobodyWon}</p>
             </div>
           )}
         </div>

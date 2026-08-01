@@ -42,14 +42,28 @@ export default function RoomPage() {
   const canStart = room.players.length >= 3;
   const handleStart = useCallback(() => {
     if (!canStart) return;
-    getSocket().emit("game:start", { cardsToWin: room.cardsToWin });
-  }, [canStart, room.cardsToWin]);
+    getSocket().emit("game:start");
+  }, [canStart]);
   const handleCopyCode = useCallback(() => {
-    navigator.clipboard.writeText(room.code).catch(() => {});
-  }, [room.code]);
+    navigator.clipboard.writeText(room.code).catch(() => {
+      alert(t.lobby.copyFailed);
+    });
+  }, [room.code, t]);
   const handleCopyLink = useCallback(() => {
-    navigator.clipboard.writeText(window.location.href).catch(() => {});
-  }, []);
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        const btn = document.getElementById("copy-link-btn");
+        if (btn) {
+          const orig = btn.textContent;
+          btn.textContent = t.lobby.copied;
+          setTimeout(() => { btn.textContent = orig; }, 2000);
+        }
+      })
+      .catch(() => {
+        alert(t.lobby.copyFailed);
+      });
+  }, [t]);
 
   return (
     <main className="min-h-dvh flex items-center justify-center p-4 bg-surface">

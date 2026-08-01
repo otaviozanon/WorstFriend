@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/game-engine/types";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 
 interface Props {
   card: Card;
@@ -9,14 +10,16 @@ interface Props {
 }
 
 export default function CardDisplay({ card, roundNumber, cardsToWin }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div className="w-full max-w-xl mx-auto">
       <div className="flex items-center justify-between mb-3">
         <span className="text-text-secondary text-xs font-medium">
-          Rodada {roundNumber}
+          {t.game.round} {roundNumber}
         </span>
         <span className="text-text-muted text-xs">
-          {cardsToWin} cartas para vencer
+          {cardsToWin} {t.game.cardsToWin}
         </span>
       </div>
 

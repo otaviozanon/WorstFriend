@@ -1,42 +1,118 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
-import { createRoom, joinRoom, removePlayer, setPlayerDisconnected } from "@/game-engine/room";
+import { createRoom, joinRoom, removePlayer, setPlayerDisconnected, setPlayerReconnected } from "@/game-engine/room";
 import { startGame, checkWinCondition } from "@/game-engine/game";
 import { recordVote, resolveRound, startRound, allVotesIn } from "@/game-engine/round";
 import { buildGameResult } from "@/game-engine/scoring";
 import { shuffleDeck } from "@/game-engine/deck";
 import {
-  getRoom, setRoom, deleteRoom,
+  getRoom, setRoom, deleteRoom, getAllRooms,
   mapSocketToPlayer, removeSocketMapping,
   getRoomBySocketId, getPlayerIdBySocketId,
+  getPlayerSocketId,
 } from "./rooms";
-import { Room } from "@/game-engine/types";
+import { Room, CardCategory, GameError } from "@/game-engine/types";
+
+const VALID_CATEGORIES: CardCategory[] = ["ácida_extrema", "+18"];
+
+function sanitizeCategories(input?: string[]): CardCategory[] {
+  if (!input || !input.length) return ["ácida_extrema"];
+  return input.filter((c): c is CardCategory => (VALID_CATEGORIES as string[]).includes(c));
+}
 
 const VOTE_TIMEOUT = 30000;
 const DISCONNECT_TIMEOUT = 60000;
+const ROOM_CLEANUP_INTERVAL = 300000;
+const RATE_LIMIT_WINDOW = 500;
+
+const rateLimiters = new Map<string, Map<string, number>>();
+
+function checkRateLimit(socketId: string, event: string): boolean {
+  const now = Date.now();
+  let tracker = rateLimiters.get(socketId);
+  if (!tracker) {
+    tracker = new Map();
+    rateLimiters.set(socketId, tracker);
+  }
+  const last = tracker.get(event) || 0;
+  if (now - last < RATE_LIMIT_WINDOW) {
+    return false;
+  }
+  tracker.set(event, now);
+  return true;
+}
 
 function getErrorMessage(e: unknown): string {
+  if (e instanceof GameError) return e.message;
   return e instanceof Error ? e.message : "Erro inesperado";
 }
 
+function cleanupStaleRooms(io: SocketIOServer): void {
+  const now = Date.now();
+  for (const [code, room] of getAllRooms()) {
+    const hasConnected = room.players.some((p) => p.connected);
+    if (!hasConnected) {
+      clearVoteTimer(code);
+      for (const player of room.players) {
+        const sid = getPlayerSocketId(player.id);
+        if (sid) removeSocketMapping(sid);
+      }
+      deleteRoom(code);
+    }
+  }
+}
+
 export function setupSocket(io: SocketIOServer): void {
+  const cleanupTimer = setInterval(() => cleanupStaleRooms(io), ROOM_CLEANUP_INTERVAL);
+
   io.on("connection", (socket: Socket) => {
 
-    socket.on("room:create", ({ playerName, cardsToWin }: { playerName: string; cardsToWin?: number }) => {
+    socket.on("player:reconnect", ({ roomCode, playerId }: { roomCode: string; playerId: string }) => {
+      const normalizedCode = roomCode?.trim().toUpperCase();
+      if (!normalizedCode || !playerId) return;
+      const room = getRoom(normalizedCode);
+      if (!room) {
+        socket.emit("error", { message: "Sala não encontrada" });
+        return;
+      }
+      const player = room.players.find((p) => p.id === playerId);
+      if (!player || player.connected) {
+        socket.emit("error", { message: "Jogador não encontrado" });
+        return;
+      }
+      const reconnected = setPlayerReconnected(room, playerId);
+      setRoom(normalizedCode, reconnected);
+      mapSocketToPlayer(socket.id, normalizedCode, playerId);
+      socket.join(normalizedCode);
+      socket.emit("player:id", playerId);
+      io.to(normalizedCode).emit("room:state", reconnected);
+    });
+
+    socket.on("room:create", ({ playerName, cardsToWin, categories }: { playerName: string; cardsToWin?: number; categories?: string[] }) => {
       if (!playerName?.trim()) {
         socket.emit("error", { message: "Nome não pode ser vazio" });
         return;
       }
-      const room = createRoom(playerName.trim(), cardsToWin && [4, 5, 7].includes(cardsToWin) ? cardsToWin : 5);
-      setRoom(room.code, room);
-      const player = room.players[0];
-      mapSocketToPlayer(socket.id, room.code, player.id);
-      socket.join(room.code);
-      socket.emit("player:id", player.id);
-      socket.emit("room:state", room);
+      try {
+        const room = createRoom(
+          playerName.trim(),
+          cardsToWin && [4, 5, 7].includes(cardsToWin) ? cardsToWin : 5,
+          sanitizeCategories(categories),
+          getRoom,
+        );
+        setRoom(room.code, room);
+        const player = room.players[0];
+        mapSocketToPlayer(socket.id, room.code, player.id);
+        socket.join(room.code);
+        socket.emit("player:id", player.id);
+        socket.emit("room:state", room);
+      } catch (e) {
+        socket.emit("error", { message: getErrorMessage(e) });
+      }
     });
 
     socket.on("room:join", ({ roomCode, playerName }: { roomCode: string; playerName: string }) => {
-      const room = getRoom(roomCode);
+      const normalizedCode = roomCode?.trim().toUpperCase();
+      const room = getRoom(normalizedCode);
       if (!room) {
         socket.emit("error", { message: "Sala não encontrada" });
         return;
@@ -47,18 +123,19 @@ export function setupSocket(io: SocketIOServer): void {
       }
       try {
         const updated = joinRoom(room, playerName.trim());
-        setRoom(roomCode, updated);
+        setRoom(normalizedCode, updated);
         const player = updated.players[updated.players.length - 1];
-        mapSocketToPlayer(socket.id, roomCode, player.id);
-        socket.join(roomCode);
+        mapSocketToPlayer(socket.id, normalizedCode, player.id);
+        socket.join(normalizedCode);
         socket.emit("player:id", player.id);
-        io.to(roomCode).emit("room:state", updated);
+        io.to(normalizedCode).emit("room:state", updated);
       } catch (e) {
         socket.emit("error", { message: getErrorMessage(e) });
       }
     });
 
-    socket.on("game:start", ({ cardsToWin }: { cardsToWin: number }) => {
+    socket.on("game:start", () => {
+      if (!checkRateLimit(socket.id, "game:start")) return;
       const room = getRoomBySocketId(socket.id);
       if (!room) return;
       const playerId = getPlayerIdBySocketId(socket.id);
@@ -66,13 +143,8 @@ export function setupSocket(io: SocketIOServer): void {
         socket.emit("error", { message: "Apenas o host pode iniciar" });
         return;
       }
-      if (![4, 5, 7].includes(cardsToWin)) {
-        socket.emit("error", { message: "Numero de cartas invalido. Use 4, 5 ou 7." });
-        return;
-      }
       try {
-        const withCardsWin = { ...room, cardsToWin };
-        const playing = startGame(withCardsWin);
+        const playing = startGame(room);
         setRoom(room.code, playing);
         io.to(room.code).emit("room:state", playing);
         startVoteTimer(room.code, io);
@@ -82,6 +154,7 @@ export function setupSocket(io: SocketIOServer): void {
     });
 
     socket.on("game:vote", ({ targetId }: { targetId: string }) => {
+      if (!checkRateLimit(socket.id, "game:vote")) return;
       const room = getRoomBySocketId(socket.id);
       if (!room || room.status !== "voting") return;
       const playerId = getPlayerIdBySocketId(socket.id);
@@ -100,8 +173,10 @@ export function setupSocket(io: SocketIOServer): void {
     });
 
     socket.on("game:nextRound", () => {
+      if (!checkRateLimit(socket.id, "game:nextRound")) return;
       const room = getRoomBySocketId(socket.id);
       if (!room || room.status !== "revealing") return;
+      if (!room.rounds[room.rounds.length - 1]?.votesRevealed) return;
       const playerId = getPlayerIdBySocketId(socket.id);
       if (room.host !== playerId) {
         socket.emit("error", { message: "Apenas o host pode avançar" });
@@ -122,6 +197,7 @@ export function setupSocket(io: SocketIOServer): void {
     });
 
     socket.on("game:playAgain", () => {
+      if (!checkRateLimit(socket.id, "game:playAgain")) return;
       const room = getRoomBySocketId(socket.id);
       if (!room) return;
       const playerId = getPlayerIdBySocketId(socket.id);
@@ -134,7 +210,7 @@ export function setupSocket(io: SocketIOServer): void {
 
       if (votes.length >= connectedPlayers && connectedPlayers >= 3) {
         const nextIndex = room.currentCardIndex;
-        const freshDeck = nextIndex >= room.deck.length ? shuffleDeck() : room.deck;
+        const freshDeck = nextIndex >= room.deck.length ? shuffleDeck(room.categories) : room.deck;
         const resetRoom: Room = {
           ...room,
           status: "playing",
@@ -164,6 +240,12 @@ export function setupSocket(io: SocketIOServer): void {
       const updated = setPlayerDisconnected(room, mapping.playerId);
       setRoom(mapping.roomCode, updated);
       io.to(mapping.roomCode).emit("room:state", updated);
+
+      if (updated.status === "voting" && allVotesIn(updated)) {
+        clearVoteTimer(mapping.roomCode);
+        finishVoting(mapping.roomCode, updated, io, true);
+      }
+
       setTimeout(() => {
         const r = getRoom(mapping.roomCode);
         if (r) {
@@ -171,6 +253,7 @@ export function setupSocket(io: SocketIOServer): void {
           if (p && !p.connected) {
             const cleaned = removePlayer(r, mapping.playerId);
             if (cleaned.players.length === 0) {
+              clearVoteTimer(mapping.roomCode);
               deleteRoom(mapping.roomCode);
             } else {
               setRoom(mapping.roomCode, cleaned);
@@ -180,6 +263,10 @@ export function setupSocket(io: SocketIOServer): void {
         }
       }, DISCONNECT_TIMEOUT);
     });
+  });
+
+  io.engine.on("close", () => {
+    clearInterval(cleanupTimer);
   });
 }
 

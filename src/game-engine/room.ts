@@ -1,8 +1,8 @@
-import { Room, Player } from "./types";
+import { Room, Player, CardCategory, GameError, MAX_PLAYERS } from "./types";
 import { shuffleDeck } from "./deck";
 
 function generateId(): string {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return crypto.randomUUID();
 }
 
 function generateRoomCode(): string {
@@ -14,7 +14,12 @@ function generateRoomCode(): string {
   return code;
 }
 
-export function createRoom(playerName: string, cardsToWin: number = 5): Room {
+export function createRoom(
+  playerName: string,
+  cardsToWin: number = 5,
+  categories: CardCategory[] = ["ácida_extrema"],
+  getRoomFn?: (code: string) => Room | undefined,
+): Room {
   const playerId = generateId();
   const hostPlayer: Player = {
     id: playerId,
@@ -23,13 +28,27 @@ export function createRoom(playerName: string, cardsToWin: number = 5): Room {
     connected: true,
     isHost: true,
   };
+
+  let code: string;
+  let attempts = 0;
+  do {
+    code = generateRoomCode();
+    attempts++;
+  } while (getRoomFn?.(code) && attempts < 100);
+
+  const deck = shuffleDeck(categories);
+  if (deck.length === 0) {
+    throw new GameError("EMPTY_DECK");
+  }
+
   return {
-    code: generateRoomCode(),
+    code,
     host: playerId,
     players: [hostPlayer],
     status: "waiting",
     cardsToWin,
-    deck: shuffleDeck(),
+    categories,
+    deck,
     currentCardIndex: 0,
     rounds: [],
     timerSeconds: 30,
@@ -40,7 +59,13 @@ export function createRoom(playerName: string, cardsToWin: number = 5): Room {
 
 export function joinRoom(room: Room, playerName: string): Room {
   if (room.status !== "waiting") {
-    throw new Error("Não é possível entrar em uma partida em andamento");
+    throw new GameError("GAME_IN_PROGRESS");
+  }
+  if (room.players.length >= MAX_PLAYERS) {
+    throw new GameError("ROOM_FULL");
+  }
+  if (room.players.some((p) => p.name.toLowerCase() === playerName.toLowerCase())) {
+    throw new GameError("DUPLICATE_NAME");
   }
   const newPlayer: Player = {
     id: generateId(),
@@ -59,7 +84,7 @@ export function removePlayer(room: Room, playerId: string): Room {
     updatedHost = updatedPlayers[0].id;
     updatedPlayers[0] = { ...updatedPlayers[0], isHost: true };
   }
-  return { ...room, players: updatedPlayers, host: updatedHost };
+  return { ...room, players: updatedPlayers, host: updatedHost, playAgainVotes: room.playAgainVotes.filter((id) => id !== playerId) };
 }
 
 export function setPlayerDisconnected(room: Room, playerId: string): Room {
@@ -67,6 +92,15 @@ export function setPlayerDisconnected(room: Room, playerId: string): Room {
     ...room,
     players: room.players.map((p) =>
       p.id === playerId ? { ...p, connected: false } : p,
+    ),
+  };
+}
+
+export function setPlayerReconnected(room: Room, playerId: string): Room {
+  return {
+    ...room,
+    players: room.players.map((p) =>
+      p.id === playerId ? { ...p, connected: true } : p,
     ),
   };
 }

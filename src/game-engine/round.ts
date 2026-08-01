@@ -1,4 +1,4 @@
-import { Room, Round, Vote } from "./types";
+import { Room, Round, Vote, GameError } from "./types";
 import { shuffleDeck } from "./deck";
 
 export function startRound(room: Room): Room {
@@ -6,11 +6,19 @@ export function startRound(room: Room): Room {
   let index = room.currentCardIndex;
 
   if (index >= deck.length) {
-    deck = shuffleDeck();
+    deck = shuffleDeck(room.categories);
     index = 0;
   }
 
+  if (deck.length === 0) {
+    throw new GameError("EMPTY_DECK");
+  }
+
   const card = deck[index];
+  if (!card) {
+    throw new GameError("EMPTY_DECK");
+  }
+
   const round: Round = {
     roundNumber: room.rounds.length + 1,
     card,
@@ -29,15 +37,18 @@ export function startRound(room: Room): Room {
 
 export function recordVote(room: Room, playerId: string, targetId: string): Room {
   if (playerId === targetId) {
-    throw new Error("Você não pode votar em si mesmo");
+    throw new GameError("SELF_VOTE");
+  }
+  if (!room.players.some((p) => p.id === targetId)) {
+    throw new GameError("INVALID_TARGET");
   }
   const currentRound = room.rounds[room.rounds.length - 1];
   if (!currentRound) {
-    throw new Error("Nenhuma rodada ativa");
+    throw new GameError("NO_ACTIVE_ROUND");
   }
   const alreadyVoted = currentRound.votes.find((v) => v.playerId === playerId);
   if (alreadyVoted) {
-    throw new Error("Você já votou nesta rodada");
+    throw new GameError("ALREADY_VOTED");
   }
   const vote: Vote = { playerId, targetId };
   return {
@@ -52,7 +63,8 @@ export function recordVote(room: Room, playerId: string, targetId: string): Room
 export function allVotesIn(room: Room): boolean {
   const currentRound = room.rounds[room.rounds.length - 1];
   if (!currentRound) return false;
-  return currentRound.votes.length >= room.players.length;
+  const connectedCount = room.players.filter((p) => p.connected).length;
+  return currentRound.votes.length >= connectedCount;
 }
 
 export function resolveRound(room: Room): Room {

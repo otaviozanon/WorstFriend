@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Player } from "@/game-engine/types";
 import { Check } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 
 interface Props {
   players: Player[];
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeLeft, myVoteTargetId }: Props) {
+  const { t } = useLanguage();
   const others = players.filter((p) => p.id !== myPlayerId);
   const [localVote, setLocalVote] = useState<string | null>(null);
 
@@ -44,7 +46,7 @@ export default function VotePanel({ players, myPlayerId, hasVoted, onVote, timeL
       </div>
 
       <div className="flex flex-wrap justify-center gap-2">
-        <p className="w-full text-text-muted text-xs text-center mb-1">Toque em um jogador para votar:</p>
+        <p className="w-full text-text-muted text-xs text-center mb-1">{t.game.tapToVote}</p>
         {others.map((p, i) => {
           const isMyVote = p.id === myVoteTargetId;
           const isLocalSelection = !hasVoted && p.id === localVote && !isMyVote;

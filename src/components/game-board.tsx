@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 import CardDisplay from "./card-display";
 import PlayerGrid from "./player-grid";
 import VotePanel from "./vote-panel";
@@ -13,6 +14,7 @@ import RulesModal from "./rules-modal";
 export default function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
   const [timeLeft, setTimeLeft] = useState(30);
+  const { t } = useLanguage();
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const roundRef = useRef<number | null>(null);
@@ -125,7 +127,7 @@ export default function GameBoard() {
                   onClick={() => getSocket().emit("game:nextRound")}
                   className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand to-brand-dark hover:from-brand-light hover:to-brand text-black font-bold text-lg transition-all duration-200 active:scale-[0.98] shadow-lg shadow-brand/30"
                 >
-                  Proxima Carta
+                  {t.game.nextCard}
                 </button>
               </div>
             )}

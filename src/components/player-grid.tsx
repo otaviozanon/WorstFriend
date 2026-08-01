@@ -2,6 +2,7 @@
 
 import { Player } from "@/game-engine/types";
 import { Crown, Check, Clock } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/useLanguage";
 
 interface Props {
   players: Player[];
@@ -17,8 +18,10 @@ interface Props {
 const CARD_ANGLES = [-3, 0, 3];
 
 export default function PlayerGrid({ players, myPlayerId, winnerId, votesRevealed, voteCounts, myVoteTargetId, votedPlayerIds, isVotingPhase }: Props) {
+  const { t } = useLanguage();
   const cols = players.length <= 6 ? "grid-cols-2 sm:grid-cols-3" : players.length <= 12 ? "grid-cols-3 sm:grid-cols-4" : "grid-cols-4 sm:grid-cols-5";
   const votedCount = isVotingPhase && votedPlayerIds ? votedPlayerIds.size : 0;
+  const connectedCount = players.filter((p) => p.connected).length;
 
   return (
     <div className="space-y-3">
@@ -39,7 +42,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
               <span className="text-text-muted text-[10px] self-center ml-1">+{players.length - 7}</span>
             )}
           </div>
-          <span className="text-text-muted text-xs">{votedCount}/{players.length}</span>
+          <span className="text-text-muted text-xs">{votedCount}/{connectedCount}</span>
         </div>
       )}
 
@@ -50,7 +53,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
         const isMe = p.id === myPlayerId;
         const wonThisRound = isWinner && p.cardsWon > 0;
         const hasVoted = isVotingPhase && votedPlayerIds ? votedPlayerIds.has(p.id) : false;
-        const notVoted = isVotingPhase && !hasVoted && p.id !== myPlayerId;
+        const notVoted = isVotingPhase && !hasVoted && p.id !== myPlayerId && p.connected;
 
         return (
           <div
@@ -61,7 +64,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
                 : hasVoted
                   ? "border-accent-success/30 bg-accent-success/5"
                   : "border-border bg-surface-raised"
-            }`}
+            } ${!p.connected ? "opacity-50" : ""}`}
             style={{ animationDelay: `${i * 40}ms` }}
           >
             {p.isHost && (
@@ -77,12 +80,13 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
             )}
 
             <p className={`text-sm font-semibold truncate ${isMe ? "text-brand-light" : "text-text-primary"}`}>
-              {p.name}{isMe ? " (você)" : ""}
+              {p.name}{isMe ? ` ${t.lobby.you}` : ""}
+              {!p.connected ? ` ${t.lobby.disconnected}` : ""}
             </p>
 
             {!votesRevealed && p.id === myVoteTargetId && (
               <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-brand/20 border border-brand/30 text-brand-light text-[10px] font-semibold">
-                seu voto
+                {t.game.yourVote}
               </span>
             )}
 
@@ -120,7 +124,7 @@ export default function PlayerGrid({ players, myPlayerId, winnerId, votesReveale
 
             {votesRevealed && (
               <p className={`mt-1.5 text-xs font-bold ${isWinner ? "text-brand-light" : "text-text-muted"}`}>
-                {count > 0 ? `${count} ${count === 1 ? "voto" : "votos"}` : ""}
+                {count > 0 ? `${count} ${count === 1 ? t.game.vote : t.game.votes}` : ""}
               </p>
             )}
           </div>

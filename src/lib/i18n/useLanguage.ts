@@ -1,26 +1,28 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { translations, Language, TranslationKeys } from "./translations";
+import { translations, Language } from "./translations";
+
+export type TFunc = typeof translations.pt;
 
 interface LanguageState {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: TranslationKeys;
+  t: TFunc;
 }
 
 export const useLanguage = create<LanguageState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       language: "pt" as Language,
-      t: translations.pt as TranslationKeys,
+      t: translations.pt as TFunc,
       setLanguage: (lang: Language) =>
-        set({ language: lang, t: translations[lang] as TranslationKeys }),
+        set({ language: lang, t: translations[lang] as TFunc }),
     }),
     {
       name: "worstfriend-language",
       onRehydrateStorage: () => (state) => {
         if (state) {
-          state.t = translations[state.language] as TranslationKeys;
+          state.t = translations[state.language] as TFunc;
         }
       },
     },

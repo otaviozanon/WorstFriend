@@ -201,7 +201,7 @@ export default function GameResult() {
               />
             </div>
             <p className="text-text-muted text-xs">
-              {voteProgress}/{connectedPlayers} votaram
+              {voteProgress}/{connectedPlayers} {t.result.alreadyVoted}
             </p>
           </div>
         )}

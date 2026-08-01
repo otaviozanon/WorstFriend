@@ -14,8 +14,13 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   });
 
+  const allowedOrigin = process.env.NEXT_PUBLIC_URL || "*";
+
   const io = new SocketIOServer(server, {
-    cors: { origin: "*", methods: ["GET", "POST"] },
+    cors: {
+      origin: dev ? "*" : allowedOrigin,
+      methods: ["GET", "POST"],
+    },
   });
 
   setupSocket(io);
@@ -24,4 +29,17 @@ app.prepare().then(() => {
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });
+
+  function gracefulShutdown(signal: string) {
+    console.log(`\n> Received ${signal}, shutting down gracefully...`);
+    io.close(() => {
+      server.close(() => {
+        process.exit(0);
+      });
+    });
+    setTimeout(() => process.exit(1), 10000);
+  }
+
+  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+  process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 });

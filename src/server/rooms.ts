@@ -14,10 +14,18 @@ export function deleteRoom(roomCode: string): void {
   rooms.delete(roomCode);
 }
 
+export function getAllRooms(): Map<string, Room> {
+  return rooms;
+}
+
 const socketToPlayer = new Map<string, { roomCode: string; playerId: string }>();
 const playerToSocket = new Map<string, string>();
 
 export function mapSocketToPlayer(socketId: string, roomCode: string, playerId: string): void {
+  const existing = playerToSocket.get(playerId);
+  if (existing) {
+    socketToPlayer.delete(existing);
+  }
   socketToPlayer.set(socketId, { roomCode, playerId });
   playerToSocket.set(playerId, socketId);
 }
@@ -26,7 +34,10 @@ export function removeSocketMapping(socketId: string): { roomCode: string; playe
   const mapping = socketToPlayer.get(socketId);
   if (mapping) {
     socketToPlayer.delete(socketId);
-    playerToSocket.delete(mapping.playerId);
+    const stillMapped = [...socketToPlayer.values()].some((m) => m.playerId === mapping.playerId);
+    if (!stillMapped) {
+      playerToSocket.delete(mapping.playerId);
+    }
   }
   return mapping;
 }
@@ -39,4 +50,8 @@ export function getRoomBySocketId(socketId: string): Room | undefined {
 
 export function getPlayerIdBySocketId(socketId: string): string | undefined {
   return socketToPlayer.get(socketId)?.playerId;
+}
+
+export function getPlayerSocketId(playerId: string): string | undefined {
+  return playerToSocket.get(playerId);
 }

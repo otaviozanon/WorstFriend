@@ -1,6 +1,5 @@
 export const translations = {
   pt: {
-    // Home page
     home: {
       title: "Amigos de M*",
       subtitle: "WorstFriend",
@@ -14,13 +13,19 @@ export const translations = {
       joinRoom: "Entrar na Sala",
       errorName: "Digite seu nome",
       errorCode: "Digite o código da sala",
+      categories: {
+        label: "Categoria das cartas",
+        extrema: "Extrema",
+        adult: "+18",
+      },
     },
-    // Lobby
     lobby: {
       title: "Sala de Espera",
       roomCode: "Codigo da sala",
       copyCode: "Clique para copiar",
       copyLink: "Copiar link da sala",
+      copied: "Copiado!",
+      copyFailed: "Erro ao copiar",
       players: "Jogadores",
       you: "(voce)",
       host: "HOST",
@@ -28,8 +33,8 @@ export const translations = {
       startGame: "Iniciar Partida",
       waitingPlayers: "Aguardando jogadores...",
       waitingHost: "Aguardando o host iniciar a partida...",
+      disconnected: "(desconectado)",
     },
-    // Game Result
     result: {
       tie: "Empate!",
       tieDesc: "Multiplos Amigos de M*!",
@@ -40,8 +45,8 @@ export const translations = {
       newGame: "Nova partida",
       playAgain: "Jogar Novamente",
       waiting: "Aguardando outros jogadores...",
+      alreadyVoted: "votaram",
     },
-    // Rules Modal
     rules: {
       title: "Regras do Jogo",
       button: "Regras",
@@ -69,9 +74,9 @@ export const translations = {
         tip3: "Não leve para o lado pessoal — é só um jogo!",
       },
     },
-    // Game Board
     game: {
       round: "Rodada",
+      cardsToWin: "cartas para vencer",
       timeLeft: "Tempo",
       waiting: "Aguardando votos...",
       votedCount: "votou",
@@ -79,10 +84,27 @@ export const translations = {
       cannotVoteSelf: "Não pode votar em si mesmo",
       voteButton: "Confirmar Voto",
       voteLocked: "Voto Confirmado",
+      nextCard: "Proxima Carta",
+      yourVote: "seu voto",
+      votes: "votos",
+      vote: "voto",
+      wonCard: "GANHOU A CARTA!",
+      tieResult: "Empate!",
+      nobodyWon: "Ninguém ganhou esta carta (empate).",
+      tapToVote: "Toque em um jogador para votar:",
+      votesLabel: "Votos:",
+    },
+    errors: {
+      connectionLost: "Conexao perdida. Tentando reconectar...",
+      roomNotFound: "Sala não encontrada",
+      playerNotFound: "Jogador não encontrado",
+      nameEmpty: "Nome não pode ser vazio",
+      hostOnly: "Apenas o host pode iniciar",
+      hostOnlyAdvance: "Apenas o host pode avançar",
+      unexpected: "Erro inesperado",
     },
   },
   en: {
-    // Home page
     home: {
       title: "Sh*tty Friends",
       subtitle: "WorstFriend",
@@ -96,13 +118,19 @@ export const translations = {
       joinRoom: "Join Room",
       errorName: "Enter your name",
       errorCode: "Enter room code",
+      categories: {
+        label: "Card categories",
+        extrema: "Extreme",
+        adult: "+18",
+      },
     },
-    // Lobby
     lobby: {
       title: "Waiting Room",
       roomCode: "Room code",
       copyCode: "Click to copy",
       copyLink: "Copy room link",
+      copied: "Copied!",
+      copyFailed: "Failed to copy",
       players: "Players",
       you: "(you)",
       host: "HOST",
@@ -110,8 +138,8 @@ export const translations = {
       startGame: "Start Game",
       waitingPlayers: "Waiting for players...",
       waitingHost: "Waiting for host to start...",
+      disconnected: "(disconnected)",
     },
-    // Game Result
     result: {
       tie: "Tie!",
       tieDesc: "Multiple Sh*tty Friends!",
@@ -122,8 +150,8 @@ export const translations = {
       newGame: "New game",
       playAgain: "Play Again",
       waiting: "Waiting for other players...",
+      alreadyVoted: "voted",
     },
-    // Rules Modal
     rules: {
       title: "Game Rules",
       button: "Rules",
@@ -151,9 +179,9 @@ export const translations = {
         tip3: "Don't take it personally — it's just a game!",
       },
     },
-    // Game Board
     game: {
       round: "Round",
+      cardsToWin: "cards to win",
       timeLeft: "Time",
       waiting: "Waiting for votes...",
       votedCount: "voted",
@@ -161,6 +189,24 @@ export const translations = {
       cannotVoteSelf: "Cannot vote for yourself",
       voteButton: "Confirm Vote",
       voteLocked: "Vote Confirmed",
+      nextCard: "Next Card",
+      yourVote: "your vote",
+      votes: "votes",
+      vote: "vote",
+      wonCard: "WON THE CARD!",
+      tieResult: "Tie!",
+      nobodyWon: "Nobody won this card (tie).",
+      tapToVote: "Tap a player to vote:",
+      votesLabel: "Votes:",
+    },
+    errors: {
+      connectionLost: "Connection lost. Trying to reconnect...",
+      roomNotFound: "Room not found",
+      playerNotFound: "Player not found",
+      nameEmpty: "Name cannot be empty",
+      hostOnly: "Only the host can start",
+      hostOnlyAdvance: "Only the host can advance",
+      unexpected: "Unexpected error",
     },
   },
 } as const;
