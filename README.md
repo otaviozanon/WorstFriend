@@ -45,6 +45,12 @@ Perguntas sobre comportamentos, hábitos questionáveis e situações constrange
 
 ---
 
+## 📄 License
+
+GPL-3.0. See [LICENSE](/LICENSE).
+
+---
+
 <p align="center">
   Feito com 💩 por amigos que não se levam a sério<br />
   Jogo original: <strong>Amigos de Merda</strong> por Buró Brasil
