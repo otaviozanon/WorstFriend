@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: worstfriend
+    env: bun
+    plan: free
+    buildCommand: bun install && bun run build
+    startCommand: bun run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: NEXT_PUBLIC_WS_URL
+        value: https://worstfriend.onrender.com
